@@ -1151,12 +1151,12 @@ function showDetail(url) {
     html += `<button class="ws-btn ws-${opt.key}${active}" onclick="setWorkflowStatus('${safeUrlJs}','${opt.key}')">${opt.label}</button>`;
   }
   html += `</div>`;
-  html += `<div class="detail-section-title" style="margin-top:14px">Document / briefing link</div>`;
+  html += `<div class="detail-section-title" style="margin-top:14px">Content briefing</div>`;
   html += `<div class="doc-link-row">`;
-  html += `<input type="text" class="doc-link-input" id="doc-link-input" value="${(curWD.docLink || '').replace(/"/g,'&quot;')}" placeholder="Plak hier de link naar het contentdocument..." onblur="setDocLink('${safeUrlJs}',this.value)" onkeydown="if(event.key==='Enter')this.blur()">`;
+  html += `<input type="text" class="doc-link-input" id="doc-link-input" value="${(curWD.docLink || '').replace(/"/g,'&quot;')}" placeholder="Plak link naar Google Doc, Notion..." onblur="setDocLink('${safeUrlJs}',this.value)" onkeydown="if(event.key==='Enter')this.blur()">`;
   const dlHref = curWD.docLink ? ` href="${curWD.docLink.replace(/"/g,'&quot;')}"` : '';
   const dlStyle = curWD.docLink ? '' : ' style="opacity:.3;pointer-events:none"';
-  html += `<a id="doc-link-open-btn" class="doc-link-open-btn" target="_blank"${dlHref}${dlStyle} title="Open document in nieuw tabblad">&#8599;</a>`;
+  html += `<a id="doc-link-open-btn" class="doc-link-open-btn" target="_blank"${dlHref}${dlStyle} title="Open briefing in nieuw tabblad">&#8599;</a>`;
   html += `</div>`;
   html += `<div class="detail-section-title" style="margin-top:14px">Notitie / opmerking</div>`;
   html += `<textarea class="ws-comment" placeholder="Voeg een interne opmerking toe..." onblur="setComment('${safeUrlJs}',this.value)">${curWD.comment || ''}</textarea>`;
