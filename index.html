@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GW-SF: URL-structuur &amp; Keyword Mapping</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --navy:        #38536a;
+  --navy-dark:   #253d52;
+  --navy-deeper: #1e3040;
+  --navy-light:  #eef3f7;
+  --teal:        #3ea4d3;
+  --teal-light:  #e8f5fb;
+  --teal-mid:    #5b8fb9;
+  --muted:       #8ba5bb;
+  --text:        #4e5258;
+  --text-light:  #6b7a87;
+  --white:       #ffffff;
+  --bg:          #f4f6f8;
+  --border:      #dde4ea;
+  --border-mid:  #c8d5de;
+  --font:        'Barlow', sans-serif;
+  --radius:      6px;
+}
+html, body { height: 100%; font-family: var(--font); font-weight: 400; background: var(--bg); color: var(--text); }
+
+/* ── HEADER ─────────────────────────────── */
+.header {
+  background: var(--navy-deeper);
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.logo { display: flex; align-items: center; gap: 10px; }
+.logo-mark {
+  width: 30px; height: 30px;
+  background: var(--teal);
+  border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 13px; color: white; letter-spacing: -0.5px;
+}
+.logo-name { color: white; font-weight: 600; font-size: 14px; letter-spacing: 0.2px; }
+.logo-sub { color: var(--muted); font-weight: 300; font-size: 12px; margin-left: 2px; }
+.header-title { color: var(--muted); font-size: 12px; font-weight: 300; }
+.header-meta { color: #5d7a8e; font-size: 11px; font-weight: 300; }
+
+/* ── TABS ────────────────────────────────── */
+.tabs-bar {
+  background: white;
+  border-bottom: 1px solid var(--border);
+  padding: 0 28px;
+  display: flex;
+  align-items: center;
+  height: 46px;
+  position: sticky;
+  top: 48px;
+  z-index: 99;
+  box-shadow: 0 1px 3px rgba(56,83,106,.06);
+}
+.tab {
+  padding: 0 18px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  color: var(--text-light);
+  transition: all 0.15s;
+  user-select: none;
+  letter-spacing: 0.2px;
+}
+.tab:hover { color: var(--navy); }
+.tab.active { color: var(--navy); border-bottom-color: var(--teal); }
+.tab-count {
+  background: var(--bg);
+  color: var(--text-light);
+  padding: 2px 7px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.tab.active .tab-count { background: var(--teal-light); color: var(--teal); }
+.tabs-spacer { flex: 1; }
+.ctrl-btn {
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  background: white;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  color: var(--navy);
+  font-family: var(--font);
+  margin-left: 8px;
+  transition: all 0.15s;
+}
+.ctrl-btn:hover { background: var(--navy); color: white; border-color: var(--navy); }
+
+/* ── LEGEND ──────────────────────────────── */
+.legend-bar {
+  background: white;
+  border-bottom: 1px solid var(--border);
+  padding: 6px 28px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.legend-item {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 11px; color: var(--text-light);
+  padding: 3px 10px; border-radius: 14px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.15s;
+}
+.legend-item:hover { border-color: var(--border-mid); background: var(--bg); color: var(--navy); }
+.legend-item.active { background: var(--navy-light); border-color: var(--navy); color: var(--navy); font-weight: 600; }
+.legend-item.active .dot { box-shadow: 0 0 0 2px white, 0 0 0 3px var(--navy); }
+.legend-item-text { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text-light); padding: 3px 4px; }
+.dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.dot-bestaand { background: var(--muted); }
+.dot-nieuw { background: var(--teal); }
+.dot-hoog { background: var(--navy); }
+.dot-midden { background: var(--teal); }
+.dot-laag { background: #b0bec5; }
+.dot-ws-todo       { background: #bbb; }
+.dot-ws-briefing   { background: #3949ab; }
+.dot-ws-inprogress { background: #c85000; }
+.dot-ws-review     { background: #7b1fa2; }
+.dot-ws-done       { background: #2e7d32; }
+.legend-sep { color: var(--border); padding: 0 2px; }
+.filter-count {
+  background: var(--teal); color: white;
+  font-size: 10px; font-weight: 700;
+  padding: 1px 6px; border-radius: 8px;
+  margin-left: 4px; display: none;
+}
+.filter-count.visible { display: inline; }
+.tree-node.filter-hidden { display: none; }
+
+/* ── MAIN ────────────────────────────────── */
+.main { display: flex; height: calc(100vh - 48px - 46px - 35px); }
+
+/* ── TREE PANEL ──────────────────────────── */
+.tree-panel {
+  width: 58%;
+  overflow-y: auto;
+  padding: 16px 0 32px;
+  border-right: 1px solid var(--border);
+  background: white;
+}
+
+/* ── TREE NODES ──────────────────────────── */
+.tree-node { position: relative; }
+.tree-row {
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  height: 36px;
+  cursor: pointer;
+  transition: background 0.1s;
+  gap: 6px;
+  border-left: 3px solid transparent;
+}
+.tree-row:hover { background: var(--bg); }
+.tree-row.selected { background: var(--navy-light); border-left-color: var(--teal); }
+.tree-row.selected .node-url { color: var(--navy); }
+
+.toggle-icon {
+  width: 16px; height: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; color: var(--muted);
+  flex-shrink: 0;
+  transition: transform 0.15s;
+}
+.tree-node.open > .tree-row .toggle-icon { transform: rotate(90deg); }
+.toggle-placeholder { width: 16px; flex-shrink: 0; }
+
+.node-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.node-dot-bestaand { background: var(--muted); }
+.node-dot-nieuw { background: var(--teal); }
+
+.node-url {
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  color: var(--text);
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.node-url .url-dim { color: #b0bec5; }
+.node-url .url-seg { color: var(--navy); font-weight: 600; }
+.node-url .url-seg.new { color: var(--teal); }
+
+.node-badges { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+.badge {
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+  font-family: var(--font);
+}
+.badge-hoog    { background: var(--navy-light); color: var(--navy); }
+.badge-midden  { background: var(--teal-light); color: var(--teal); }
+.badge-laag    { background: #f0f0f0; color: #8ba5bb; }
+.badge-nieuw   { background: var(--teal-light); color: var(--teal); }
+.badge-bestaand{ background: #f0f4f7; color: var(--muted); }
+.badge-kritiek { background: var(--navy-deeper); color: white; }
+.badge-noindex { background: #f4f4f4; color: #aaa; border: 1px solid #e0e0e0; }
+.badge-fase    { background: #f0f7ff; color: var(--teal-mid); }
+
+/* Workflow status badges (tree row) */
+.badge-ws-todo       { background: #f0f0f0; color: #888; border: 1px solid #e0e0e0; }
+.badge-ws-briefing   { background: #e8eaf6; color: #3949ab; }
+.badge-ws-inprogress { background: #fff3e0; color: #c85000; }
+.badge-ws-review     { background: #f3e5f5; color: #7b1fa2; }
+.badge-ws-done       { background: #e8f5e9; color: #2e7d32; }
+
+/* Workflow status selector in detail panel */
+.ws-selector { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.ws-btn {
+  padding: 5px 13px; border-radius: 20px; border: 1.5px solid transparent;
+  font-size: 11px; font-weight: 600; cursor: pointer; font-family: inherit;
+  letter-spacing: 0.02em; transition: all 0.15s;
+}
+.ws-btn:hover { opacity: 0.85; }
+.ws-btn.ws-active { border-color: currentColor; box-shadow: 0 0 0 2px rgba(0,0,0,0.06); }
+.ws-btn.ws-todo       { background: #f0f0f0; color: #888; }
+.ws-btn.ws-briefing   { background: #e8eaf6; color: #3949ab; }
+.ws-btn.ws-inprogress { background: #fff3e0; color: #c85000; }
+.ws-btn.ws-review     { background: #f3e5f5; color: #7b1fa2; }
+.ws-btn.ws-done       { background: #e8f5e9; color: #2e7d32; }
+
+/* Document link row */
+.doc-link-row { display: flex; align-items: center; gap: 6px; margin-top: 6px; }
+.doc-link-input {
+  flex: 1; min-width: 0; border: 1px solid #dde4ea; border-radius: 6px;
+  padding: 6px 10px; font-size: 12px; color: var(--text); font-family: inherit;
+  outline: none; transition: border 0.15s; background: #fafcfd;
+}
+.doc-link-input:focus { border-color: var(--teal); background: white; }
+.doc-link-input::placeholder { color: #bcc8d0; }
+.doc-link-open-btn {
+  flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; border-radius: 6px; background: var(--teal-light);
+  color: var(--teal); text-decoration: none; font-size: 13px; border: none; cursor: pointer;
+  transition: all 0.15s;
+}
+.doc-link-open-btn:hover { background: var(--teal); color: white; }
+.doc-link-open-btn:disabled { opacity: 0.3; pointer-events: none; }
+
+/* Comment textarea */
+.ws-comment {
+  width: 100%; box-sizing: border-box; margin-top: 6px;
+  border: 1px solid #dde4ea; border-radius: 6px; padding: 6px 10px;
+  font-size: 12px; color: var(--text); font-family: inherit;
+  resize: vertical; min-height: 52px; outline: none; background: #fafcfd;
+  transition: border 0.15s; line-height: 1.5;
+}
+.ws-comment:focus { border-color: var(--teal); background: white; }
+.ws-comment::placeholder { color: #bcc8d0; }
+
+/* Export/import toolbar */
+.io-toolbar { display: flex; gap: 6px; align-items: center; }
+.io-btn {
+  padding: 4px 11px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.85);
+  font-size: 11px; font-weight: 500; cursor: pointer; font-family: inherit;
+  transition: all 0.15s; letter-spacing: 0.01em;
+}
+.io-btn:hover { background: rgba(255,255,255,0.22); border-color: rgba(255,255,255,0.5); color: white; }
+.io-btn.io-import { background: rgba(62,164,211,0.25); border-color: rgba(62,164,211,0.5); }
+.io-btn.io-import:hover { background: rgba(62,164,211,0.4); }
+
+.node-volume {
+  font-size: 11px;
+  color: #b0bec5;
+  font-weight: 500;
+  min-width: 52px;
+  text-align: right;
+  flex-shrink: 0;
+  font-family: 'Courier New', monospace;
+}
+.node-volume.hoog   { color: var(--navy); font-weight: 600; }
+.node-volume.midden { color: var(--teal); }
+
+.tree-children {
+  display: none;
+  padding-left: 18px;
+  border-left: 1px solid var(--border);
+  margin-left: 26px;
+}
+.tree-node.open > .tree-children { display: block; }
+
+/* ── DETAIL PANEL ────────────────────────── */
+.detail-panel {
+  width: 42%;
+  overflow-y: auto;
+  background: var(--bg);
+  padding: 20px;
+}
+.detail-empty {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--border-mid);
+  gap: 10px;
+  text-align: center;
+}
+.detail-empty svg { opacity: 0.35; }
+.detail-empty-text { font-size: 13px; font-weight: 300; color: var(--muted); }
+
+.detail-card {
+  background: white;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.detail-card-body { padding: 15px 17px; }
+
+.detail-url-bar {
+  background: var(--navy-deeper);
+  color: #8eb8d4;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  padding: 9px 14px;
+  border-radius: var(--radius);
+  word-break: break-all;
+  margin-bottom: 12px;
+  cursor: pointer;
+  line-height: 1.5;
+}
+.detail-url-bar span { color: white; font-weight: 600; }
+.detail-url-bar:hover { background: var(--navy-dark); }
+
+.detail-badges { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 12px; }
+.badge-lg {
+  padding: 4px 11px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: var(--font);
+  letter-spacing: 0.2px;
+}
+.badge-lg-hoog     { background: var(--navy-light); color: var(--navy); }
+.badge-lg-midden   { background: var(--teal-light); color: var(--teal); }
+.badge-lg-laag     { background: #f0f0f0; color: #8ba5bb; }
+.badge-lg-nieuw    { background: var(--teal-light); color: var(--teal); }
+.badge-lg-bestaand { background: #f0f4f7; color: var(--muted); }
+.badge-lg-kritiek  { background: var(--navy-deeper); color: white; }
+.badge-lg-fase     { background: #f0f7ff; color: var(--teal-mid); }
+.badge-lg-cluster  { background: var(--navy-light); color: var(--navy); font-family: 'Courier New', monospace; }
+
+.detail-section-title {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.9px;
+  margin-bottom: 7px;
+  margin-top: 14px;
+}
+.detail-section-title:first-child { margin-top: 0; }
+
+.kw-table { width: 100%; border-collapse: collapse; }
+.kw-table tr { border-bottom: 1px solid var(--border); }
+.kw-table tr:last-child { border-bottom: none; }
+.kw-table td { padding: 5px 0; font-size: 12px; }
+.kw-table td:last-child { text-align: right; font-family: 'Courier New', monospace; font-size: 11px; color: var(--text-light); }
+.kw-main  { color: var(--navy) !important; font-weight: 600 !important; }
+.kw-vol-main { color: var(--navy) !important; font-weight: 600 !important; }
+
+.detail-text { font-size: 12px; color: var(--text); line-height: 1.6; }
+.detail-text code { background: var(--bg); padding: 2px 5px; border-radius: 3px; font-size: 11px; font-family: 'Courier New', monospace; }
+.detail-text.italic { font-style: italic; color: var(--text-light); }
+.detail-val { font-weight: 500; color: var(--navy); font-size: 13px; }
+
+.hreflang-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  background: var(--bg);
+  border-radius: 5px;
+  margin-bottom: 5px;
+  font-size: 11px;
+}
+.hreflang-lang { font-weight: 700; color: var(--navy); width: 28px; flex-shrink: 0; font-size: 11px; }
+.hreflang-url  { font-family: 'Courier New', monospace; color: var(--text); flex: 1; word-break: break-all; }
+
+.action-list { list-style: none; }
+.action-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 5px 0;
+  font-size: 12px;
+  color: var(--text);
+  border-bottom: 1px solid #f3f4f6;
+}
+.action-list li:last-child { border-bottom: none; }
+.action-check { color: var(--border-mid); flex-shrink: 0; margin-top: 1px; }
+.action-list li.urgent .action-check { color: var(--teal); }
+
+.briefing-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: var(--navy-light);
+  border: 1px solid var(--border-mid);
+  border-radius: var(--radius);
+  text-decoration: none;
+  color: var(--navy);
+  font-size: 12px;
+  font-weight: 500;
+  margin-top: 8px;
+}
+.briefing-link:hover { background: var(--navy); color: white; }
+
+.note-box {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: var(--radius);
+  padding: 10px 13px;
+  font-size: 12px;
+  color: #78350f;
+  line-height: 1.5;
+}
+.note-box-navy {
+  background: var(--navy-light);
+  border: 1px solid var(--border-mid);
+  border-left: 3px solid var(--teal);
+  border-radius: var(--radius);
+  padding: 10px 13px;
+  font-size: 12px;
+  color: var(--navy);
+  line-height: 1.5;
+}
+
+/* ── SCROLLBARS ──────────────────────────── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-mid); border-radius: 3px; }
+
+/* ── LANG TABS ───────────────────────────── */
+.lang-content { display: none; }
+.lang-content.active { display: block; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">
+    <div class="logo-mark">GW</div>
+    <span class="logo-name">Gamma-Wopla <span class="logo-sub">Smart-Flow</span></span>
+  </div>
+  <div class="header-title">URL-structuur &amp; Keyword Mapping: SEO 2026</div>
+  <div class="header-meta">Revisie 2 &nbsp;·&nbsp; 10 juni 2026 &nbsp;·&nbsp; Sander De Gheest</div>
+  <div class="io-toolbar">
+    <button class="io-btn io-import" onclick="importWorkflow()" title="Laad een eerder geexporteerd JSON-bestand in">&#8593; Importeren</button>
+    <button class="io-btn" onclick="exportWorkflow()" title="Download de huidige workflow-status als JSON-bestand">&#8595; Exporteren</button>
+    <input type="file" id="import-file-input" accept=".json" style="display:none" onchange="handleImportFile(this)">
+  </div>
+</div>
+
+<div class="tabs-bar">
+  <div class="tab active" onclick="switchLang('nl')">
+    NL <span class="tab-count" id="count-nl">34</span>
+  </div>
+  <div class="tab" onclick="switchLang('fr')">
+    FR <span class="tab-count" id="count-fr">34</span>
+  </div>
+  <div class="tab" onclick="switchLang('en')">
+    EN <span class="tab-count" id="count-en">5</span>
+  </div>
+  <div class="tabs-spacer"></div>
+  <button class="ctrl-btn" onclick="expandAll()">Alles uitklappen</button>
+  <button class="ctrl-btn" onclick="collapseAll()">Alles inklappen</button>
+</div>
+
+<div class="legend-bar">
+  <div class="legend-item" id="f-bestaand" onclick="toggleFilter('status','bestaand')"><div class="dot dot-bestaand"></div> Bestaand</div>
+  <div class="legend-item" id="f-nieuw"    onclick="toggleFilter('status','nieuw')"><div class="dot dot-nieuw"></div> Nieuw</div>
+  <span class="legend-sep">|</span>
+  <div class="legend-item" id="f-hoog"   onclick="toggleFilter('priority','hoog')"><div class="dot dot-hoog"></div> HOOG</div>
+  <div class="legend-item" id="f-midden" onclick="toggleFilter('priority','midden')"><div class="dot dot-midden"></div> MIDDEN</div>
+  <div class="legend-item" id="f-laag"   onclick="toggleFilter('priority','laag')"><div class="dot dot-laag"></div> LAAG</div>
+  <span class="legend-sep">|</span>
+  <div class="legend-item" id="f-ws-todo"       onclick="toggleFilter('ws','todo')"><div class="dot dot-ws-todo"></div> Te doen</div>
+  <div class="legend-item" id="f-ws-briefing"   onclick="toggleFilter('ws','briefing')"><div class="dot dot-ws-briefing"></div> Briefing klaar</div>
+  <div class="legend-item" id="f-ws-inprogress" onclick="toggleFilter('ws','inprogress')"><div class="dot dot-ws-inprogress"></div> In uitvoering</div>
+  <div class="legend-item" id="f-ws-review"     onclick="toggleFilter('ws','review')"><div class="dot dot-ws-review"></div> In review</div>
+  <div class="legend-item" id="f-ws-done"       onclick="toggleFilter('ws','done')"><div class="dot dot-ws-done"></div> Klaar</div>
+  <span class="legend-sep">|</span>
+  <div class="legend-item-text">F1: voor livegang &nbsp; F2: na livegang</div>
+  <span class="filter-count" id="filter-count"></span>
+</div>
+
+<div class="main">
+  <div class="tree-panel" id="tree-panel">
+    <div id="lang-nl" class="lang-content active"></div>
+    <div id="lang-fr" class="lang-content"></div>
+    <div id="lang-en" class="lang-content"></div>
+  </div>
+  <div class="detail-panel" id="detail-panel">
+    <div class="detail-empty" id="detail-empty">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#38536a" stroke-width="1.5">
+        <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/>
+        <rect x="9" y="3" width="6" height="4" rx="1"/>
+        <path d="M9 12h6M9 16h4"/>
+      </svg>
+      <div class="detail-empty-text">Klik op een URL in de boom<br>om de details te bekijken</div>
+    </div>
+    <div id="detail-content" style="display:none"></div>
+  </div>
+</div>
+
+<script>
+// ─── DATA ────────────────────────────────────────────────────────────────────
+
+const nodes = {
+  nl: {
+    url: '/nl/',
+    label: 'Homepage NL',
+    status: 'bestaand',
+    type: 'homepage',
+    keyword: 'gamma wopla smart-flow',
+    h1: 'Homepage NL: Gamma-Wopla Smart-Flow',
+    hreflang_fr: '/fr/',
+    children: [
+      {
+        url: '/nl/oplossingen/',
+        label: 'Oplossingen',
+        status: 'bestaand',
+        type: 'overzicht',
+        keyword: 'verpakkingsoplossingen',
+        h1: 'Onze oplossingen',
+        note: 'Intern linken naar /nl/producten/ zodra die tak live is.',
+        hreflang_fr: '/fr/solutions/',
+        children: [
+          { url: '/nl/oplossingen/ruimtebesparende-oplossingen/', label: 'Ruimtebesparende oplossingen', status: 'bestaand', type: 'oplossing', keyword: 'ruimtebesparende verpakking', hreflang_fr: '/fr/solutions/solutions-gain-de-place/', note: 'Intern linken naar kunststof-pallets, palletboxen, kunststof-bakken.' },
+          { url: '/nl/oplossingen/duurzame-oplossingen/', label: 'Duurzame oplossingen', status: 'bestaand', type: 'oplossing', keyword: 'duurzame verpakking herbruikbaar', hreflang_fr: '/fr/solutions/solutions-durables/' },
+          { url: '/nl/oplossingen/automatiseringsoplossingen/', label: 'Automatiseringsoplossingen', status: 'bestaand', type: 'oplossing', keyword: 'verpakking automatisering', hreflang_fr: '/fr/solutions/solutions-d-automatisation/' },
+          { url: '/nl/oplossingen/oplossingen-op-maat/', label: 'Oplossingen op maat', status: 'bestaand', type: 'oplossing', keyword: 'verpakking op maat maatwerk', hreflang_fr: '/fr/solutions/solutions-sur-mesure/' },
+        ]
+      },
+      {
+        url: '/nl/sectoren/',
+        label: 'Sectoren',
+        status: 'bestaand',
+        type: 'overzicht',
+        note: 'Plan van aanpak: 8 sectorpagina\'s NL met 500-800 woorden content. 6 bestaand op staging, 2 nieuw aan te maken.',
+        hreflang_fr: '/fr/secteurs/',
+        children: [
+          { url: '/nl/sectoren/voeding-agro-industrie/', label: 'Voeding & Agro-industrie', status: 'bestaand', type: 'sectorpagina', keyword: 'verpakking voedingsindustrie food grade', volume: 50, priority: 'midden', fase: 1, h1: 'Verpakkingen voor de voedings- en agro-industrie', meta_title: 'Verpakkingen voor de voedingsindustrie | GW-SF', keywords_sec: [['verpakking voedsel', 40], ['food grade plastic', 30]], hreflang_fr: '/fr/secteurs/alimentation-agro-industrie/', note: 'Content te schrijven: 500-800 woorden. Koppelen aan /nl/producten/kunststof-bakken/ en /nl/producten/kunststof-pallets/.' },
+          { url: '/nl/sectoren/farmacie-cosmetica/', label: 'Farmacie & Cosmetica', status: 'bestaand', type: 'sectorpagina', keyword: 'verpakking farmaceutisch clean room', volume: 30, priority: 'midden', fase: 1, h1: 'Verpakkingen voor de farmaceutische industrie', meta_title: 'Verpakkingen farmacie en cosmetica | GW-SF', hreflang_fr: '/fr/secteurs/pharmaceutique-cosmetique/', note: 'Content te schrijven: 500-800 woorden. Nadruk op reinheid, traceerbaarheid en clean room-toepassingen.' },
+          { url: '/nl/sectoren/retail/', label: 'Retail & Distributie', status: 'bestaand', type: 'sectorpagina', keyword: 'verpakking retail distributie', volume: 40, priority: 'midden', fase: 1, h1: 'Verpakkingen voor retail en distributie', meta_title: 'Verpakkingen voor retail en distributie | GW-SF', hreflang_fr: '/fr/secteurs/commerce-de-detail/', note: 'Content te schrijven: 500-800 woorden.' },
+          { url: '/nl/sectoren/automotive/', label: 'Automotive', status: 'bestaand', type: 'sectorpagina', keyword: 'automotive verpakking grijpbakken ODETTE GALIA', volume: 60, priority: 'midden', fase: 1, h1: 'Verpakkingen voor de automobielindustrie', meta_title: 'Automotive verpakkingen: ODETTE & GALIA | GW-SF', keywords_sec: [['ODETTE bakken', 50], ['GALIA norm verpakking', 40]], hreflang_fr: '/fr/secteurs/automobile/', note: 'Content te schrijven: 500-800 woorden. Koppelen aan /nl/producten/grijpbakken/ en ODETTE/GALIA subcategorietak.' },
+          { url: '/nl/sectoren/transport-logistiek/', label: 'Transport & Logistiek', status: 'bestaand', type: 'sectorpagina', keyword: 'logistieke verpakking warehousing', volume: 30, priority: 'midden', fase: 1, h1: 'Verpakkingen voor transport en logistiek', meta_title: 'Verpakkingen transport en logistiek | GW-SF', hreflang_fr: '/fr/secteurs/transport-logistique/', note: 'Content te schrijven: 500-800 woorden. Koppelen aan /nl/producten/distributiebakken/ en /nl/producten/plooibakken/.' },
+          { url: '/nl/sectoren/landbouw/', label: 'Landbouw', status: 'bestaand', type: 'sectorpagina', keyword: 'verpakking landbouw agrarisch', volume: 20, priority: 'midden', fase: 2, h1: 'Verpakkingen voor de landbouwsector', meta_title: 'Verpakkingen voor landbouw | GW-SF', hreflang_fr: '/fr/secteurs/agriculture/', note: 'Content te schrijven: 500-800 woorden. Fase 2 (lagere organische kans).' },
+          { url: '/nl/sectoren/pluimvee/', label: 'Pluimvee', status: 'nieuw', type: 'sectorpagina', keyword: 'pluimvee verpakking bakken', volume: 20, priority: 'midden', fase: 2, h1: 'Verpakkingen voor de pluimveesector', meta_title: 'Verpakkingen voor pluimvee | GW-SF', hreflang_fr: '/fr/secteurs/aviculture/', note: 'NIEUW: sectorpagina aanmaken in Shopware. Specifieke eisen: waterdicht, reinigbaar, kleurcodering. Fase 2.' },
+          { url: '/nl/sectoren/algemene-industrie/', label: 'Algemene industrie', status: 'nieuw', type: 'sectorpagina', keyword: 'industriele verpakking algemeen', volume: 30, priority: 'midden', fase: 2, h1: 'Industriele verpakkingen voor de maakindustrie', meta_title: 'Industriele verpakkingen | GW-SF', hreflang_fr: '/fr/secteurs/industrie-generale/', note: 'NIEUW: brede sector als catch-all voor niet-gespecialiseerde industriele klanten. Fase 2.' },
+        ]
+      },
+      {
+        url: '/nl/producten/',
+        label: 'Producten',
+        status: 'nieuw',
+        priority: 'kritiek',
+        type: 'overzicht',
+        h1: 'Producten: Gamma-Wopla Smart-Flow',
+        hreflang_fr: '/fr/produits/',
+        note: 'NIEUW: Shopware-categorietak aanmaken. Sluit aan op geplande "Products" nav-item in XD-design.',
+        acties: ['Nieuwe Shopware-categorie aanmaken: "Producten" (NL)', 'Slug: nl/producten', 'Hreflang koppelen aan /fr/produits/'],
+        children: [
+          {
+            url: '/nl/producten/kunststof-pallets/',
+            label: 'Kunststof Pallets',
+            status: 'nieuw', cluster: 'NL-01', type: 'categorie',
+            keyword: 'kunststof pallets', volume: 3340, kd: 14, priority: 'hoog', fase: 1,
+            h1: 'Kunststof pallets',
+            meta_title: 'Kunststof Pallets | Gamma-Wopla Smart-Flow',
+            meta_desc: 'Kunststof pallets van Belgische fabrikant. Plastic pallets in alle afmetingen. Snel leverbaar in NL en BE. Vraag een offerte aan.',
+            keywords_sec: [['plastic pallets', 720], ['kunststof pallet', 390], ['plastic pallet', 320], ['plastic paletten', 210], ['plastieken paletten', 150], ['pallets kunststof', 80]],
+            hreflang_fr: '/fr/produits/palettes-plastique/',
+            children: [
+              { url: '/nl/producten/kunststof-pallets/exportpallets/', label: 'Exportpallets', status: 'nieuw', cluster: 'NL-03', type: 'subcategorie', keyword: 'export pallets', volume: 380, priority: 'midden', fase: 2, h1: 'Exportpallets in kunststof', hreflang_fr: '/fr/produits/palettes-plastique/export/' },
+              { url: '/nl/producten/kunststof-pallets/nestbaar/', label: 'Nestbare pallets', status: 'nieuw', cluster: 'NL-06', type: 'subcategorie', keyword: 'nestbare pallet', volume: 430, priority: 'midden', fase: 2, h1: 'Nestbare kunststof pallets', hreflang_fr: '/fr/produits/palettes-plastique/nestable/' },
+            ]
+          },
+          {
+            url: '/nl/producten/palletboxen/',
+            label: 'Palletboxen',
+            status: 'nieuw', cluster: 'NL-04', type: 'categorie',
+            keyword: 'palletbox', volume: 4230, kd: 10, priority: 'hoog', fase: 1,
+            h1: 'Palletboxen in kunststof',
+            meta_title: 'Palletboxen | Gamma-Wopla Smart-Flow',
+            keywords_sec: [['boxpallet', 1000], ['pallet box', 720], ['kunststof palletbox', 390], ['palletboxen kunststof', 480], ['palletkist', 80]],
+            hreflang_fr: '/fr/produits/caisses-palette/',
+            children: [
+              { url: '/nl/producten/palletboxen/met-deksel/', label: 'Palletboxen met deksel', status: 'nieuw', cluster: 'NL-05', type: 'subcategorie', keyword: 'palletbox met deksel', volume: 250, priority: 'midden', fase: 2, h1: 'Palletbox met deksel', hreflang_fr: '/fr/produits/caisses-plastique/avec-couvercle/' },
+            ]
+          },
+          {
+            url: '/nl/producten/kunststof-bakken/',
+            label: 'Kunststof Bakken',
+            status: 'nieuw', cluster: 'NL-07', type: 'categorie',
+            keyword: 'kunststof bakken', volume: 4990, kd: 15, priority: 'hoog', fase: 1,
+            h1: 'Kunststof bakken',
+            meta_title: 'Kunststof Bakken | Gamma-Wopla Smart-Flow',
+            keywords_sec: [['plastic bakken', 1100], ['bakken kunststof', 880], ['kunststof bak', 720], ['plastic bak', 600]],
+            hreflang_fr: '/fr/produits/caisses-plastique/',
+            children: [
+              { url: '/nl/producten/kunststof-bakken/voorraadbakken/', label: 'Voorraadbakken', status: 'nieuw', cluster: 'NL-08', type: 'subcategorie', keyword: 'plastic voorraadbakken', volume: 1850, priority: 'hoog', fase: 1, h1: 'Plastic voorraadbakken', meta_title: 'Plastic voorraadbakken kopen | GW-SF', keywords_sec: [['kunststof bakken met deksel', 400], ['plastic bakken met deksel', 250], ['stapelbakken voorraadbakken', 200]], hreflang_fr: '/fr/produits/bacs-de-stockage/', briefing: '01-NL-08-plastic-voorraadbakken.md' },
+              { url: '/nl/producten/kunststof-bakken/euronorm/', label: 'Euronorm bakken', status: 'nieuw', cluster: 'NL-09', type: 'subcategorie', keyword: 'euronorm bakken', volume: 2280, kd: 12, priority: 'hoog', fase: 1, h1: 'Euronorm bakken', meta_title: 'Euronorm bakken | Gamma-Wopla Smart-Flow', keywords_sec: [['euro bakken', 480], ['euronormbak', 320], ['euro bak 600x400', 210]], hreflang_fr: '/fr/produits/caisses-plastique/euronorme/' },
+              { url: '/nl/producten/kunststof-bakken/met-deksel/', label: 'Met deksel', status: 'nieuw', type: 'subcategorie', keyword: 'kunststof bakken met deksel', volume: 400, priority: 'midden', fase: 1, h1: 'Kunststof bakken met deksel', hreflang_fr: '/fr/produits/caisses-plastique/avec-couvercle/' },
+              { url: '/nl/producten/kunststof-bakken/nestbaar/', label: 'Nestbare bakken', status: 'nieuw', cluster: 'NL-16', type: 'subcategorie', keyword: 'nestbare bakken', volume: 210, priority: 'midden', fase: 2, h1: 'Nestbare kunststof bakken' },
+            ]
+          },
+          {
+            url: '/nl/producten/stapelbakken/',
+            label: 'Stapelbakken',
+            status: 'nieuw', cluster: 'NL-10', type: 'categorie',
+            keyword: 'stapelbakken', volume: 3760, kd: 14, priority: 'hoog', fase: 1,
+            h1: 'Stapelbakken in kunststof',
+            meta_title: 'Stapelbakken | Gamma-Wopla Smart-Flow',
+            keywords_sec: [['stapelbak', 620], ['kunststof stapelbakken', 390], ['plastic stapelbakken', 280]],
+            hreflang_fr: '/fr/produits/caisses-empilables/',
+            children: [
+              { url: '/nl/producten/stapelbakken/stapelkratten/', label: 'Stapelkratten', status: 'nieuw', type: 'subcategorie', keyword: 'stapelkratten', volume: 480, priority: 'midden', fase: 2, h1: 'Stapelkratten in kunststof' },
+            ]
+          },
+          {
+            url: '/nl/producten/magazijnbakken/',
+            label: 'Magazijnbakken',
+            status: 'nieuw', cluster: 'NL-11', type: 'categorie',
+            keyword: 'magazijnbakken', volume: 2900, kd: 12, priority: 'hoog', fase: 1,
+            h1: 'Magazijnbakken in kunststof',
+            meta_title: 'Magazijnbakken | Gamma-Wopla Smart-Flow',
+            keywords_sec: [['magazijnbak', 480], ['kunststof magazijnbak', 260], ['opbergbakken magazijn', 190]],
+            hreflang_fr: '/fr/produits/bacs-de-stockage/'
+          },
+          {
+            url: '/nl/producten/distributiebakken/',
+            label: 'Distributiebakken',
+            status: 'nieuw', cluster: 'NL-12', type: 'categorie',
+            keyword: 'distributiebakken', volume: 660, kd: 8, priority: 'hoog', fase: 1,
+            h1: 'Distributiebakken in kunststof',
+            meta_title: 'Distributiebakken | Gamma-Wopla Smart-Flow',
+            keywords_sec: [['distributiebak', 180], ['transportbakken', 170], ['bakken distributie', 90]],
+            hreflang_fr: '/fr/produits/bacs-de-distribution/'
+          },
+          {
+            url: '/nl/producten/plooibakken/',
+            label: 'Plooibakken',
+            status: 'nieuw', cluster: 'NL-13', type: 'categorie',
+            keyword: 'plooibak', volume: 870, kd: 8, priority: 'hoog', fase: 1,
+            h1: 'Plooibakken in kunststof',
+            meta_title: 'Plooibakken | Gamma-Wopla Smart-Flow',
+            keywords_sec: [['plooibakken', 390], ['opvouwbare bakken', 220], ['inklapbare bakken', 140]],
+            hreflang_fr: '/fr/produits/caisses-pliables/'
+          },
+          {
+            url: '/nl/producten/kratten/',
+            label: 'Kratten',
+            status: 'nieuw', cluster: 'NL-14', type: 'categorie',
+            keyword: 'plastic kratten', volume: 900, priority: 'midden', fase: 2,
+            h1: 'Plastic kratten',
+            meta_title: 'Plastic kratten | Gamma-Wopla Smart-Flow',
+            keywords_sec: [['kunststof kratten', 420], ['plastic krat', 280]],
+            hreflang_fr: '/fr/produits/caisses-plastique/cagettes/',
+            children: [
+              { url: '/nl/producten/kratten/euronorm/', label: 'Euronorm kratten', status: 'nieuw', type: 'subcategorie', keyword: 'euronorm kratten', volume: 60, priority: 'laag', fase: 2, h1: 'Euronorm kratten' }
+            ]
+          },
+          {
+            url: '/nl/producten/grijpbakken/',
+            label: 'Grijpbakken',
+            status: 'nieuw', cluster: 'NL-15', type: 'categorie',
+            keyword: 'grijpbakken', volume: 200, kd: 0, priority: 'hoog', fase: 1,
+            h1: 'Grijpbakken',
+            meta_title: 'Grijpbakken voor industrie en montage | GW-SF',
+            meta_desc: 'Kunststof grijpbakken voor productie, montage en magazijninrichting. Stapelbaar, duurzaam en direct van fabrikant.',
+            keywords_sec: [['grijpbak', null], ['industriele bakken', 60], ['plastic bakken voeding', 50]],
+            hreflang_fr: null,
+            briefing: '03-NL-15-grijpbakken.md',
+            note: 'KD 0: geen concurrentie. Huidige positie 8 organisch. Hoge kans op top-3 met minimale contenteffort.',
+          },
+          {
+            url: '/nl/producten/sleeve-pack/',
+            label: 'Sleeve Pack',
+            status: 'nieuw', cluster: 'NL-17', type: 'categorie',
+            keyword: 'sleeve pack', volume: 140, kd: 8, priority: 'midden', fase: 1,
+            h1: 'Sleeve Pack: Macronorm verpakking',
+            hreflang_fr: '/fr/produits/sleeve-pack/',
+            hreflang_en: '/products/sleeve-pack/'
+          },
+        ]
+      },
+      { url: '/nl/producten-a-z/', label: 'Producten A-Z', status: 'bestaand', type: 'utility', noindex: true, note: 'Navigatiehulp. Noindex instellen: geen SEO-doel.', hreflang_fr: '/fr/produits-a-z/' },
+
+      {
+        url: '/nl/blog/',
+        label: 'Blog / Kenniscentrum',
+        status: 'nieuw',
+        type: 'overzicht',
+        priority: 'midden',
+        fase: 1,
+        note: 'Plan van aanpak: 8-10 NL blog-artikelen. Doel: topical authority opbouwen en long-tail traffic genereren.',
+        hreflang_fr: '/fr/blog/',
+        children: [
+          { url: '/nl/blog/kunststof-vs-houten-pallets/', label: 'Kunststof vs houten pallets: vergelijking', status: 'nieuw', type: 'blog', priority: 'hoog', fase: 1, keyword: 'kunststof pallet vs houten pallet', volume: 90, h1: 'Kunststof pallets of houten pallets: welke kiest u?', meta_title: 'Kunststof vs houten pallets: voor- en nadelen | GW-SF', note: 'Evergreen vergelijkingsartikel. Intern linken naar /nl/producten/kunststof-pallets/.' },
+          { url: '/nl/blog/euronorm-bakken-complete-gids/', label: 'Complete gids: euronorm bakken maten en types', status: 'nieuw', type: 'blog', priority: 'hoog', fase: 1, keyword: 'euronorm bakken maten types', volume: 70, h1: 'Euronorm bakken: complete gids voor maten, types en toepassingen', meta_title: 'Euronorm bakken: gids voor maten en types | GW-SF', note: 'Gidspagina met hoog intern linkpotentieel.' },
+          { url: '/nl/blog/juiste-kunststof-pallet-kiezen/', label: 'Hoe de juiste kunststof pallet kiezen', status: 'nieuw', type: 'blog', priority: 'midden', fase: 1, keyword: 'kunststof pallet kiezen tips', volume: 40, h1: 'De juiste kunststof pallet kiezen: 5 criteria voor uw keuze', meta_title: 'Juiste kunststof pallet kiezen: 5 criteria | GW-SF', note: 'Beslissingshulp artikel.' },
+          { url: '/nl/blog/hygiene-eisen-voedingsindustrie/', label: 'Hygiëne-eisen verpakkingen voedingsindustrie', status: 'nieuw', type: 'blog', priority: 'midden', fase: 1, keyword: 'verpakking voedingsindustrie hygiëne normen', volume: 30, h1: 'Hygiëne-eisen voor kunststof verpakkingen in de voedingsindustrie', meta_title: 'Hygiëne-eisen verpakkingen voedingsindustrie | GW-SF', note: 'Koppelen aan /nl/sectoren/voeding-agro-industrie/.' },
+          { url: '/nl/blog/plooibakken-vs-vaste-bakken/', label: 'Plooibakken versus vaste bakken', status: 'nieuw', type: 'blog', priority: 'midden', fase: 1, keyword: 'plooibak vs vaste bak vergelijking', volume: 20, h1: 'Plooibakken versus vaste bakken: wanneer kiest u welke?', meta_title: 'Plooibakken vs vaste bakken | GW-SF', note: 'Intern linken naar /nl/producten/plooibakken/.' },
+          { url: '/nl/blog/kunststof-pallets-farmaceutische-industrie/', label: 'Kunststof pallets in de farmaceutische industrie', status: 'nieuw', type: 'blog', priority: 'midden', fase: 1, keyword: 'pallet farmaceutisch GMP clean room', volume: 20, h1: 'Kunststof pallets voor de farmaceutische industrie: GMP en clean room', meta_title: 'Kunststof pallets farmacie: GMP-eisen | GW-SF', note: 'Koppelen aan /nl/sectoren/farmacie-cosmetica/.' },
+          { url: '/nl/blog/retourlogistiek-vouwbare-verpakkingen/', label: 'Retourlogistiek: voordelen vouwbare verpakkingen', status: 'nieuw', type: 'blog', priority: 'midden', fase: 1, keyword: 'retourlogistiek verpakking opvouwbaar', volume: 20, h1: 'Vouwbare verpakkingen en retourlogistiek: bespaar op transportkosten', meta_title: 'Retourlogistiek met vouwbare verpakkingen | GW-SF', note: 'Koppelen aan /nl/producten/plooibakken/.' },
+          { url: '/nl/blog/magazijninrichting-juiste-bakken/', label: 'Magazijninrichting: de juiste bakken kiezen', status: 'nieuw', type: 'blog', priority: 'midden', fase: 2, keyword: 'magazijninrichting bakken systeem', volume: 30, h1: 'Magazijninrichting: hoe kiest u de juiste kunststof bakken?', meta_title: 'Magazijninrichting met kunststof bakken | GW-SF', note: 'Fase 2.' },
+          { url: '/nl/blog/duurzaamheid-kunststof-verpakkingen/', label: 'Duurzaamheid van kunststof verpakkingen', status: 'nieuw', type: 'blog', priority: 'laag', fase: 2, keyword: 'kunststof verpakking duurzaam herbruikbaar', volume: 20, h1: 'Kunststof verpakkingen en duurzaamheid: feiten en cijfers', meta_title: 'Duurzaamheid kunststof verpakkingen | GW-SF', note: 'Fase 2.' },
+          { url: '/nl/blog/automatisering-supply-chain-verpakkingen/', label: 'Automatisering supply chain en verpakkingen', status: 'nieuw', type: 'blog', priority: 'laag', fase: 2, keyword: 'automatisering supply chain verpakking', volume: 20, h1: 'Automatisering in de supply chain: welke verpakkingen zijn compatibel?', meta_title: 'Supply chain automatisering: verpakkingskeuze | GW-SF', note: 'Fase 2.' },
+        ]
+      },
+
+      {
+        url: '/nl/case-studies/',
+        label: 'Case Studies',
+        status: 'nieuw',
+        type: 'overzicht',
+        priority: 'hoog',
+        fase: 1,
+        note: "Plan van aanpak: 8-10 NL case studies. Prioritaire cases: Domino's, Soubry, Gemo. Hoge E-E-A-T waarde.",
+        hreflang_fr: '/fr/case-studies/',
+        children: [
+          { url: "/nl/case-studies/dominos-pizza/", label: "Domino's Pizza: logistieke verpakkingen", status: 'nieuw', type: 'case-study', priority: 'hoog', fase: 1, keyword: "verpakking foodservice snelle levering", h1: "Hoe Domino's Pizza de logistiek optimaliseert met GW-SF verpakkingen", meta_title: "Case study Domino's: logistieke verpakkingen | GW-SF", note: "Prioritaire case. Bevestig details met Lieselot." },
+          { url: '/nl/case-studies/soubry/', label: 'Soubry: food-grade bakken voor pastaproductie', status: 'nieuw', type: 'case-study', priority: 'hoog', fase: 1, keyword: 'verpakking pastaproductie voedingsindustrie', h1: 'Soubry: food-grade verpakkingen voor de pastaproductie', meta_title: 'Case study Soubry: food-grade verpakkingen | GW-SF', note: 'Prioritaire case. Koppelen aan /nl/sectoren/voeding-agro-industrie/.' },
+          { url: '/nl/case-studies/gemo/', label: 'Gémo: retail distributieverpakkingen', status: 'nieuw', type: 'case-study', priority: 'hoog', fase: 1, keyword: 'verpakking retail distributie fashion', h1: 'Gémo: efficiënte distributiebakken voor retail in BE en FR', meta_title: 'Case study Gémo: retail distributieverpakkingen | GW-SF', note: 'Prioritaire case. Koppelen aan /nl/sectoren/retail/.' },
+          { url: '/nl/case-studies/automotive-klant/', label: 'Automotive: ODETTE-bakken voor montagelijn', status: 'nieuw', type: 'case-study', priority: 'midden', fase: 1, keyword: 'ODETTE bak automotive toeleverancier', h1: 'Automotive toeleverancier: ODETTE-bakken voor just-in-time productie', meta_title: 'Case study automotive: ODETTE-bakken voor JIT | GW-SF', note: 'Koppelen aan /nl/sectoren/automotive/.' },
+          { url: '/nl/case-studies/logistiek-klant/', label: 'Logistiek: reductie retourvolume plooibakken', status: 'nieuw', type: 'case-study', priority: 'midden', fase: 1, keyword: 'plooibak retourlogistiek besparing', h1: 'Logistieke dienstverlener: 40% minder retourvolume dankzij plooibakken', meta_title: 'Case study logistiek: reductie retourvolume | GW-SF', note: 'Koppelen aan /nl/sectoren/transport-logistiek/.' },
+          { url: '/nl/case-studies/farmacie-klant/', label: 'Farmacie: clean room pallets en bakken', status: 'nieuw', type: 'case-study', priority: 'midden', fase: 2, keyword: 'GMP pallet clean room farmacie België', h1: 'Farmaceutisch bedrijf: GMP-conforme pallets voor clean room', meta_title: 'Case study farmacie: GMP clean room verpakkingen | GW-SF', note: 'Fase 2. Koppelen aan /nl/sectoren/farmacie-cosmetica/.' },
+          { url: '/nl/case-studies/landbouw-klant/', label: 'Landbouw: gewasbakken seizoensopslag', status: 'nieuw', type: 'case-study', priority: 'laag', fase: 2, keyword: 'gewasbak landbouw kunststof', h1: 'Landbouwbedrijf: kunststof gewasbakken voor seizoensopslag', meta_title: 'Case study landbouw: gewasbakken | GW-SF', note: 'Fase 2. Koppelen aan /nl/sectoren/landbouw/.' },
+          { url: '/nl/case-studies/pluimvee-klant/', label: 'Pluimvee: kleurgecodeerde hygiënebakken', status: 'nieuw', type: 'case-study', priority: 'laag', fase: 2, keyword: 'hygienebak pluimvee kleurcodering', h1: 'Pluimveebedrijf: kleurgecodeerde hygiënebakken per proceszone', meta_title: 'Case study pluimvee: kleurgecodeerde bakken | GW-SF', note: 'Fase 2. Koppelen aan /nl/sectoren/pluimvee/.' },
+        ]
+      },
+
+      { url: '/nl/over-ons/', label: 'Over ons', status: 'bestaand', type: 'overige', priority: 'midden', fase: 1, note: 'Fase 2.7: SEO-optimalisatie bestaande pagina. H1, meta-description bijwerken. Schema.org Organization markup toevoegen.', hreflang_fr: '/fr/a-propos/' },
+      { url: '/nl/diensten/', label: 'Diensten', status: 'bestaand', type: 'overige', priority: 'midden', fase: 1, note: 'Fase 2.7: paginatitel, meta-description en bodytekst optimaliseren. Koppelen aan productcategorieen.', hreflang_fr: '/fr/services/' },
+      { url: '/nl/contact/', label: 'Contact', status: 'bestaand', type: 'overige', priority: 'laag', fase: 1, note: 'Fase 2.7: schema.org LocalBusiness markup toevoegen. NAP-gegevens consistent maken met Google Bedrijfsprofiel.', hreflang_fr: '/fr/contact/' },
+    ]
+  },
+  fr: {
+    url: '/fr/',
+    label: 'Homepage FR',
+    status: 'bestaand',
+    type: 'homepage',
+    keyword: 'gamma wopla smart-flow',
+    h1: 'Homepage FR: Gamma-Wopla Smart-Flow',
+    hreflang_nl: '/nl/',
+    children: [
+      {
+        url: '/fr/solutions/',
+        label: 'Solutions',
+        status: 'bestaand',
+        type: 'overzicht',
+        hreflang_nl: '/nl/oplossingen/',
+        children: [
+          { url: '/fr/solutions/solutions-gain-de-place/', label: 'Solutions gain de place', status: 'bestaand', type: 'oplossing', cluster: 'FR-17', keyword: 'amenagement entrepot solutions gain de place', volume: 180, priority: 'midden', fase: 2, h1: 'Solutions gain de place', hreflang_nl: '/nl/oplossingen/ruimtebesparende-oplossingen/', note: 'Cluster FR-17: contenu SEO a ajouter (amenagement entrepot, 180/m).' },
+          { url: '/fr/solutions/solutions-durables/', label: 'Solutions durables', status: 'bestaand', type: 'oplossing', keyword: 'emballage durable reutilisable', hreflang_nl: '/nl/oplossingen/duurzame-oplossingen/' },
+          { url: '/fr/solutions/solutions-d-automatisation/', label: "Solutions d'automatisation", status: 'bestaand', type: 'oplossing', keyword: 'automatisation emballage', hreflang_nl: '/nl/oplossingen/automatiseringsoplossingen/' },
+          { url: '/fr/solutions/solutions-sur-mesure/', label: 'Solutions sur mesure', status: 'bestaand', type: 'oplossing', keyword: 'emballage sur mesure', hreflang_nl: '/nl/oplossingen/oplossingen-op-maat/' },
+        ]
+      },
+      {
+        url: '/fr/secteurs/',
+        label: 'Secteurs',
+        status: 'bestaand',
+        type: 'overzicht',
+        note: "Plan d'action: 8 pages secteurs FR avec 500-800 mots de contenu. 6 existantes sur staging, 2 nouvelles a creer.",
+        hreflang_nl: '/nl/sectoren/',
+        children: [
+          { url: '/fr/secteurs/alimentation-agro-industrie/', label: 'Alimentation & Agro-industrie', status: 'bestaand', type: 'sectorpagina', keyword: 'emballage alimentaire bac alimentaire', volume: 80, priority: 'midden', fase: 1, h1: "Emballages pour l'industrie alimentaire et agroalimentaire", meta_title: "Emballages industrie alimentaire | GW-SF", keywords_sec: [['bac alimentaire', 60], ['emballage agroalimentaire', 40]], hreflang_nl: '/nl/sectoren/voeding-agro-industrie/', note: 'Contenu a rediger: 500-800 mots. Lier a /fr/produits/bacs-alimentaires/ et /fr/produits/palettes-plastique/.' },
+          { url: '/fr/secteurs/pharmaceutique-cosmetique/', label: 'Pharmaceutique & Cosmetique', status: 'bestaand', type: 'sectorpagina', keyword: 'emballage pharmaceutique salle blanche', volume: 30, priority: 'midden', fase: 1, h1: "Emballages pour l'industrie pharmaceutique et cosmetique", meta_title: "Emballages industrie pharmaceutique | GW-SF", hreflang_nl: '/nl/sectoren/farmacie-cosmetica/', note: 'Contenu a rediger: 500-800 mots. Accent sur la proprete, tracabilite et applications salle blanche.' },
+          { url: '/fr/secteurs/commerce-de-detail/', label: 'Commerce de detail & Distribution', status: 'bestaand', type: 'sectorpagina', keyword: 'emballage retail distribution', volume: 40, priority: 'midden', fase: 1, h1: 'Emballages pour le commerce de detail et la distribution', meta_title: 'Emballages retail et distribution | GW-SF', hreflang_nl: '/nl/sectoren/retail/', note: 'Contenu a rediger: 500-800 mots.' },
+          { url: '/fr/secteurs/automobile/', label: 'Automobile', status: 'bestaand', type: 'sectorpagina', cluster: 'FR-16', keyword: 'bac odette bac galia emballage automotive', volume: 240, priority: 'midden', fase: 1, h1: "Emballages pour l'industrie automobile: normes ODETTE et GALIA", meta_title: "Emballage automobile: ODETTE et GALIA | GW-SF", keywords_sec: [['bac odette', 90], ['bac galia', 80], ['norme galia odette', 50]], hreflang_nl: '/nl/sectoren/automotive/', note: 'Contenu a rediger: 500-800 mots. Lier a /fr/produits/bacs-odette-galia/.' },
+          { url: '/fr/secteurs/transport-logistique/', label: 'Transport & Logistique', status: 'bestaand', type: 'sectorpagina', keyword: 'emballage logistique entreposage', volume: 30, priority: 'midden', fase: 1, h1: 'Emballages pour le transport et la logistique', meta_title: 'Emballages transport et logistique | GW-SF', hreflang_nl: '/nl/sectoren/transport-logistiek/', note: 'Contenu a rediger: 500-800 mots. Lier a /fr/produits/bacs-de-distribution/ et /fr/produits/bacs-pliables/.' },
+          { url: '/fr/secteurs/agriculture/', label: 'Agriculture', status: 'bestaand', type: 'sectorpagina', keyword: 'cagette plastique agriculture', volume: 20, priority: 'midden', fase: 2, h1: "Emballages pour l'agriculture et le maraichage", meta_title: 'Emballages agricoles en plastique | GW-SF', hreflang_nl: '/nl/sectoren/landbouw/', note: 'Contenu a rediger: 500-800 mots. Fase 2.' },
+          { url: '/fr/secteurs/aviculture/', label: 'Aviculture', status: 'nieuw', type: 'sectorpagina', keyword: 'bac aviculture volaille plastique', volume: 20, priority: 'midden', fase: 2, h1: "Emballages et bacs pour l'aviculture", meta_title: "Bacs pour l'aviculture | GW-SF", hreflang_nl: '/nl/sectoren/pluimvee/', note: 'NOUVEAU: page secteur a creer dans Shopware. Exigences specifiques: etanche, lavable, codage couleur. Fase 2.' },
+          { url: '/fr/secteurs/industrie-generale/', label: 'Industrie generale', status: 'nieuw', type: 'sectorpagina', keyword: 'emballage industriel general', volume: 30, priority: 'midden', fase: 2, h1: "Emballages industriels pour l'industrie manufacturiere", meta_title: 'Emballages industriels | GW-SF', hreflang_nl: '/nl/sectoren/algemene-industrie/', note: 'NOUVEAU: page catch-all pour clients industriels non specialises. Fase 2.' },
+        ]
+      },
+      {
+        url: '/fr/produits/',
+        label: 'Produits',
+        status: 'nieuw',
+        priority: 'kritiek',
+        type: 'overzicht',
+        h1: 'Produits: Gamma-Wopla Smart-Flow',
+        hreflang_nl: '/nl/producten/',
+        note: 'NOUVEAU: branche de categorie Shopware a creer. Correspond au nav "Products" dans le design XD.',
+        children: [
+          {
+            url: '/fr/produits/palettes-plastique/',
+            label: 'Palettes plastique',
+            status: 'nieuw', cluster: 'FR-01', type: 'categorie',
+            keyword: 'palette en plastique', volume: 5560, kd: 14, priority: 'hoog', fase: 1,
+            h1: 'Palettes en plastique',
+            meta_title: 'Palette en plastique | Gamma-Wopla Smart-Flow',
+            keywords_sec: [['palette plastique', 2800], ['palette en plastique', 1200], ['palette pvc', 380], ['achat palette plastique', 80]],
+            hreflang_nl: '/nl/producten/kunststof-pallets/',
+            children: [
+              { url: '/fr/produits/palettes-plastique/1200x800/', label: 'Palette 1200x800', status: 'nieuw', cluster: 'FR-02', type: 'subcategorie', keyword: 'palette plastique 1200x800', volume: 720, kd: 7, priority: 'hoog', fase: 1, h1: 'Palette plastique 1200x800: palette Europe', meta_title: 'Palette plastique 1200x800 | GW-SF', keywords_sec: [['palette plastique 80x120', 320], ['palette europe plastique', 210], ['demi-palette', 140]], hreflang_nl: '/nl/producten/kunststof-pallets/', briefing: '05-FR-02-palette-plastique-1200x800.md', note: 'Position actuelle: 40 FR. CPC demi-palette: EUR 7,20 (plus haut du cluster).' },
+              { url: '/fr/produits/palettes-plastique/alimentaire/', label: 'Palette alimentaire', status: 'nieuw', cluster: 'FR-03', type: 'subcategorie', keyword: 'palette alimentaire', volume: 420, kd: 7, priority: 'hoog', fase: 1, h1: 'Palettes alimentaires et hygieniques en plastique', meta_title: 'Palette alimentaire et hygienique | GW-SF', keywords_sec: [['palette hygienique', 20], ['achat palette plastique', 80], ['palette pvc', 100]], hreflang_nl: '/nl/sectoren/voeding-agro-industrie/', briefing: '04-FR-03-palette-alimentaire.md', note: 'GSC positie 11,9 op "palette hygienique". 2 posities van top-10.' },
+              { url: '/fr/produits/palettes-plastique/entrepot/', label: "Palette d'entrepot", status: 'nieuw', cluster: 'FR-04', type: 'subcategorie', keyword: "palette d'entrepot plastique", volume: 690, priority: 'hoog', fase: 1, h1: "Palettes plastique pour entrepot", hreflang_nl: '/nl/producten/kunststof-pallets/' },
+              { url: '/fr/produits/palettes-plastique/nestable/', label: 'Palette nestable', status: 'nieuw', type: 'subcategorie', keyword: 'palette nestable', volume: 210, priority: 'midden', fase: 2, h1: 'Palette nestable en plastique', hreflang_nl: '/nl/producten/kunststof-pallets/nestbaar/' },
+              { url: '/fr/produits/palettes-plastique/export/', label: 'Palette export', status: 'nieuw', type: 'subcategorie', keyword: 'palette export plastique', volume: 50, priority: 'laag', fase: 2, h1: 'Palette plastique pour export', hreflang_nl: '/nl/producten/kunststof-pallets/exportpallets/' },
+            ]
+          },
+          {
+            url: '/fr/produits/caisses-palette/',
+            label: 'Caisses palette',
+            status: 'nieuw', cluster: 'FR-11', type: 'categorie',
+            keyword: 'caisse palette', volume: 2260, priority: 'midden', fase: 1,
+            h1: 'Caisses palette en plastique',
+            meta_title: 'Caisse palette plastique | GW-SF',
+            keywords_sec: [['caisse palette plastique', 1060], ['palette caisse', 480]],
+            hreflang_nl: '/nl/producten/palletboxen/'
+          },
+          {
+            url: '/fr/produits/caisses-plastique/',
+            label: 'Caisses plastique',
+            status: 'nieuw', cluster: 'FR-05', type: 'categorie',
+            keyword: 'caisse plastique', volume: 12780, kd: 26, priority: 'hoog', fase: 1,
+            h1: 'Caisses en plastique',
+            meta_title: 'Caisse plastique | Gamma-Wopla Smart-Flow',
+            keywords_sec: [['boite plastique', 3200], ['bac plastique', 2800], ['caisse en plastique', 1900]],
+            hreflang_nl: '/nl/producten/kunststof-bakken/',
+            note: 'Volume le plus eleve du projet FR: 12.780/m. KD 26. Priorite absolue.',
+            children: [
+              { url: '/fr/produits/caisses-plastique/rangement/', label: 'Rangement', status: 'nieuw', cluster: 'FR-06', type: 'subcategorie', keyword: 'boite de rangement plastique', volume: 4900, priority: 'midden', fase: 1, h1: 'Boites de rangement en plastique', keywords_sec: [['bac rangement plastique', 1200], ['caisse rangement', 890]], hreflang_nl: '/nl/producten/kunststof-bakken/voorraadbakken/' },
+              { url: '/fr/produits/caisses-plastique/avec-couvercle/', label: 'Avec couvercle', status: 'nieuw', cluster: 'FR-07', type: 'subcategorie', keyword: 'caisse en plastique avec couvercle', volume: 1170, priority: 'hoog', fase: 1, h1: 'Caisses plastique avec couvercle', hreflang_nl: '/nl/producten/kunststof-bakken/met-deksel/' },
+              { url: '/fr/produits/caisses-plastique/euronorme/', label: 'Euronorme', status: 'nieuw', cluster: 'FR-13', type: 'subcategorie', keyword: 'bac euro', volume: 970, priority: 'hoog', fase: 1, h1: 'Bacs euronorme en plastique', hreflang_nl: '/nl/producten/kunststof-bakken/euronorm/' },
+              { url: '/fr/produits/caisses-plastique/cagettes/', label: 'Cagettes plastique', status: 'nieuw', cluster: 'FR-18', type: 'subcategorie', keyword: 'cagette plastique', volume: 500, priority: 'midden', fase: 2, h1: 'Cagettes plastique', hreflang_nl: '/nl/producten/kratten/' },
+            ]
+          },
+          {
+            url: '/fr/produits/caisses-empilables/',
+            label: 'Caisses empilables',
+            status: 'nieuw', cluster: 'FR-08', type: 'categorie',
+            keyword: 'caisse empilable plastique', volume: 1890, priority: 'hoog', fase: 1,
+            h1: 'Caisses empilables en plastique',
+            meta_title: 'Caisses empilables plastique | GW-SF',
+            keywords_sec: [['bac empilable', 640], ['caisse empilable', 480]],
+            hreflang_nl: '/nl/producten/stapelbakken/'
+          },
+          {
+            url: '/fr/produits/bacs-de-distribution/',
+            label: 'Bacs de distribution',
+            status: 'nieuw', cluster: 'FR-09', type: 'categorie',
+            keyword: 'bac de distribution', volume: 270, kd: 0, priority: 'hoog', fase: 1,
+            h1: 'Bacs de distribution en plastique',
+            meta_title: 'Bacs de distribution plastique | GW-SF',
+            keywords_sec: [['caisses de transport', 80], ['bacs de transport', 60], ['bac de manutention plastique', 40]],
+            hreflang_nl: '/nl/producten/distributiebakken/',
+            briefing: '02-FR-09-bac-de-distribution.md',
+            note: 'Position actuelle: 5 organique FR. KD 0. Gain rapide possible vers top-3.'
+          },
+          {
+            url: '/fr/produits/caisses-pliables/',
+            label: 'Caisses pliables',
+            status: 'nieuw', cluster: 'FR-10', type: 'categorie',
+            keyword: 'caisse pliable plastique', volume: 3660, priority: 'hoog', fase: 1,
+            h1: 'Caisses pliables en plastique',
+            meta_title: 'Caisses pliables plastique | GW-SF',
+            keywords_sec: [['caisse pliante plastique', 1200], ['bac pliable', 680]],
+            hreflang_nl: '/nl/producten/plooibakken/'
+          },
+          {
+            url: '/fr/produits/bacs-de-stockage/',
+            label: 'Bacs de stockage',
+            status: 'nieuw', cluster: 'FR-12', type: 'categorie',
+            keyword: 'bac de stockage', volume: 770, priority: 'hoog', fase: 1,
+            h1: 'Bacs de stockage industriels en plastique',
+            meta_title: 'Bac de stockage plastique | GW-SF',
+            keywords_sec: [['bac stockage', 420], ['bac industriel', 180]],
+            hreflang_nl: '/nl/producten/magazijnbakken/'
+          },
+          {
+            url: '/fr/produits/bacs-alimentaires/',
+            label: 'Bacs alimentaires',
+            status: 'nieuw', cluster: 'FR-15', type: 'categorie',
+            keyword: 'bac alimentaire', volume: 380, priority: 'hoog', fase: 1,
+            h1: 'Bacs alimentaires en plastique',
+            meta_title: 'Bac alimentaire plastique | GW-SF',
+            keywords_sec: [['bac alimentaire HACCP', 120], ['bac food grade', 90]],
+            hreflang_nl: '/nl/sectoren/voeding-agro-industrie/'
+          },
+          {
+            url: '/fr/produits/caisses-palette-plastique/',
+            label: 'Caisses palette plastique',
+            status: 'nieuw', cluster: 'FR-14', type: 'categorie',
+            keyword: 'caisse palette plastique', volume: 1060, priority: 'hoog', fase: 1,
+            h1: 'Caisses palette plastique',
+            note: 'Envisager canonical vers /fr/produits/caisses-palette/ si les deux pages se cannibalisent.',
+            hreflang_nl: '/nl/producten/palletboxen/'
+          },
+          {
+            url: '/fr/produits/sleeve-pack/',
+            label: 'Sleeve Pack',
+            status: 'nieuw', type: 'categorie',
+            keyword: 'sleeve pack', volume: 90, priority: 'midden', fase: 1,
+            h1: 'Sleeve Pack: Macronorm',
+            hreflang_nl: '/nl/producten/sleeve-pack/'
+          },
+        ]
+      },
+      { url: '/fr/produits-a-z/', label: 'Produits A-Z', status: 'bestaand', type: 'utility', noindex: true, note: 'Navigation uniquement. Ajouter noindex.', hreflang_nl: '/nl/producten-a-z/' },
+
+      {
+        url: '/fr/blog/',
+        label: 'Blog / Centre de connaissance',
+        status: 'nieuw',
+        type: 'overzicht',
+        priority: 'midden',
+        fase: 1,
+        note: "Plan d'action: 8-10 articles de blog FR. Objectif: renforcer l'autorite thematique et generer du trafic long-tail.",
+        hreflang_nl: '/nl/blog/',
+        children: [
+          { url: '/fr/blog/palette-plastique-vs-palette-bois/', label: 'Palette plastique vs palette bois: comparaison', status: 'nieuw', type: 'blog', priority: 'hoog', fase: 1, keyword: 'palette plastique vs bois', volume: 90, h1: 'Palette plastique ou palette bois: laquelle choisir?', meta_title: 'Palette plastique vs palette bois: comparatif | GW-SF', note: 'Article evergreen. Lier a /fr/produits/palettes-plastique/.' },
+          { url: '/fr/blog/guide-complet-bacs-euronorme/', label: 'Guide complet: bacs eurostandard dimensions et types', status: 'nieuw', type: 'blog', priority: 'hoog', fase: 1, keyword: 'bac euronorme dimensions types', volume: 60, h1: 'Bacs euronorme: guide complet des dimensions, types et applications', meta_title: 'Bacs euronorme: guide des dimensions et types | GW-SF', note: 'Page guide a fort potentiel de liens internes.' },
+          { url: '/fr/blog/choisir-palette-plastique/', label: 'Comment choisir sa palette plastique', status: 'nieuw', type: 'blog', priority: 'midden', fase: 1, keyword: 'choisir palette plastique criteres', volume: 40, h1: 'Comment choisir la bonne palette plastique: 5 criteres essentiels', meta_title: 'Choisir la bonne palette plastique: 5 criteres | GW-SF', note: 'Article aide a la decision.' },
+          { url: '/fr/blog/normes-hygiene-emballage-alimentaire/', label: "Normes d'hygiène emballages industrie alimentaire", status: 'nieuw', type: 'blog', priority: 'midden', fase: 1, keyword: 'norme hygiene emballage alimentaire', volume: 30, h1: "Normes d'hygiene pour les emballages plastiques dans l'industrie alimentaire", meta_title: "Normes hygiene emballages alimentaires | GW-SF", note: 'Lier a /fr/secteurs/alimentation-agro-industrie/.' },
+          { url: '/fr/blog/bacs-pliables-vs-bacs-fixes/', label: 'Bacs pliables vs bacs rigides: avantages et inconvenients', status: 'nieuw', type: 'blog', priority: 'midden', fase: 1, keyword: 'bac pliable vs bac rigide comparaison', volume: 20, h1: 'Bacs pliables ou bacs rigides: quel choix pour votre logistique?', meta_title: 'Bacs pliables vs bacs rigides | GW-SF', note: 'Lier a /fr/produits/bacs-pliables/.' },
+          { url: '/fr/blog/palettes-plastiques-industrie-pharmaceutique/', label: "Palettes plastiques pour l'industrie pharmaceutique", status: 'nieuw', type: 'blog', priority: 'midden', fase: 1, keyword: 'palette plastique pharmaceutique BPF salle blanche', volume: 20, h1: "Palettes plastiques pour l'industrie pharmaceutique: exigences BPF et salle blanche", meta_title: 'Palettes plastique pharma: exigences BPF | GW-SF', note: 'Lier a /fr/secteurs/pharmaceutique-cosmetique/.' },
+          { url: '/fr/blog/logistique-retour-emballages-pliables/', label: 'Logistique retour: avantages emballages pliables', status: 'nieuw', type: 'blog', priority: 'midden', fase: 1, keyword: 'logistique retour emballage pliable', volume: 20, h1: 'Emballages pliables et logistique retour: reduisez vos couts de transport', meta_title: 'Logistique retour avec emballages pliables | GW-SF', note: 'Lier a /fr/produits/bacs-pliables/.' },
+          { url: '/fr/blog/amenagement-entrepot-bacs-plastiques/', label: "Amenagement d'entrepot: choisir les bons bacs", status: 'nieuw', type: 'blog', priority: 'midden', fase: 2, keyword: 'amenagement entrepot bac plastique systeme', volume: 30, h1: "Amenagement d'entrepot: comment choisir les bons bacs plastiques?", meta_title: "Amenagement entrepot avec bacs plastiques | GW-SF", note: 'Fase 2.' },
+          { url: '/fr/blog/durabilite-emballages-plastiques/', label: 'Durabilite des emballages plastiques', status: 'nieuw', type: 'blog', priority: 'laag', fase: 2, keyword: 'emballage plastique durable reutilisable', volume: 20, h1: 'Emballages plastiques et developpement durable: les faits', meta_title: 'Durabilite des emballages plastiques | GW-SF', note: 'Fase 2. Article ESG.' },
+          { url: '/fr/blog/automatisation-supply-chain-emballages/', label: 'Automatisation supply chain et emballages', status: 'nieuw', type: 'blog', priority: 'laag', fase: 2, keyword: 'automatisation supply chain emballage compatible', volume: 20, h1: 'Automatisation de la supply chain: quels emballages sont compatibles?', meta_title: 'Automatisation supply chain: choix emballage | GW-SF', note: 'Fase 2.' },
+        ]
+      },
+
+      {
+        url: '/fr/case-studies/',
+        label: 'Etudes de cas',
+        status: 'nieuw',
+        type: 'overzicht',
+        priority: 'hoog',
+        fase: 1,
+        note: "Plan d'action: 8-10 etudes de cas FR. Prioritaires: Domino's, Soubry, Gemo. Forte valeur E-E-A-T.",
+        hreflang_nl: '/nl/case-studies/',
+        children: [
+          { url: "/fr/case-studies/dominos-pizza/", label: "Domino's Pizza: emballages pour livraison rapide", status: 'nieuw', type: 'case-study', priority: 'hoog', fase: 1, keyword: "emballage restauration livraison rapide", h1: "Comment Domino's Pizza optimise sa logistique avec les emballages GW-SF", meta_title: "Etude de cas Domino's: emballages logistiques | GW-SF", note: "Cas prioritaire. Confirmer les details avec Lieselot." },
+          { url: '/fr/case-studies/soubry/', label: 'Soubry: bacs alimentaires pour production de pates', status: 'nieuw', type: 'case-study', priority: 'hoog', fase: 1, keyword: 'emballage production alimentaire industrie agroalimentaire', h1: 'Soubry: emballages alimentaires pour la production de pates', meta_title: 'Etude de cas Soubry: emballages alimentaires | GW-SF', note: 'Cas prioritaire. Lier a /fr/secteurs/alimentation-agro-industrie/.' },
+          { url: '/fr/case-studies/gemo/', label: 'Gemo: emballages de distribution retail BE-FR', status: 'nieuw', type: 'case-study', priority: 'hoog', fase: 1, keyword: 'emballage retail distribution mode', h1: 'Gemo: bacs de distribution efficaces pour le retail en Belgique et en France', meta_title: 'Etude de cas Gemo: emballages retail | GW-SF', note: 'Cas prioritaire. Lier a /fr/secteurs/commerce-de-detail/.' },
+          { url: '/fr/case-studies/client-automobile/', label: 'Automobile: bacs ODETTE pour ligne de montage', status: 'nieuw', type: 'case-study', priority: 'midden', fase: 1, keyword: 'bac ODETTE automobile sous-traitant', h1: 'Sous-traitant automobile: bacs ODETTE pour la production just-in-time', meta_title: 'Etude de cas automobile: bacs ODETTE JIT | GW-SF', note: 'Lier a /fr/secteurs/automobile/.' },
+          { url: '/fr/case-studies/client-logistique/', label: 'Logistique: reduction volume retours avec bacs pliables', status: 'nieuw', type: 'case-study', priority: 'midden', fase: 1, keyword: 'bac pliable logistique reduction retours', h1: 'Prestataire logistique: 40% de volume retour en moins grace aux bacs pliables', meta_title: 'Etude de cas logistique: reduction volume retour | GW-SF', note: 'Lier a /fr/secteurs/transport-logistique/.' },
+          { url: '/fr/case-studies/client-pharmacie/', label: 'Pharmacie: palettes et bacs salle blanche', status: 'nieuw', type: 'case-study', priority: 'midden', fase: 2, keyword: 'palette BPF salle blanche pharma Belgique', h1: 'Entreprise pharmaceutique: palettes BPF pour salle blanche', meta_title: 'Etude de cas pharma: palettes salle blanche | GW-SF', note: 'Fase 2. Lier a /fr/secteurs/pharmaceutique-cosmetique/.' },
+          { url: '/fr/case-studies/client-aviculture/', label: 'Aviculture: bacs hygieniques codes par couleur', status: 'nieuw', type: 'case-study', priority: 'laag', fase: 2, keyword: 'bac aviculture hygiene codage couleur', h1: 'Entreprise avicole: bacs hygieniques codes par couleur par zone de traitement', meta_title: 'Etude de cas aviculture: bacs hygieniques | GW-SF', note: 'Fase 2. Lier a /fr/secteurs/aviculture/.' },
+          { url: '/fr/case-studies/client-agriculture/', label: 'Agriculture: cagettes de recolte saisonniere', status: 'nieuw', type: 'case-study', priority: 'laag', fase: 2, keyword: 'cagette plastique recolte agriculture', h1: 'Exploitation agricole: cagettes plastiques pour le stockage saisonnier', meta_title: 'Etude de cas agriculture: cagettes plastiques | GW-SF', note: 'Fase 2. Lier a /fr/secteurs/agriculture/.' },
+        ]
+      },
+
+      { url: '/fr/a-propos/', label: 'A propos', status: 'bestaand', type: 'overige', priority: 'midden', fase: 1, note: "Fase 2.7: optimisation SEO page existante. H1, meta-description. Schema.org Organization markup.", hreflang_nl: '/nl/over-ons/' },
+      { url: '/fr/services/', label: 'Services', status: 'bestaand', type: 'overige', priority: 'midden', fase: 1, note: "Fase 2.7: optimiser titre, meta-description et corps de texte. Lier aux categories de produits.", hreflang_nl: '/nl/diensten/' },
+      { url: '/fr/contact/', label: 'Contact', status: 'bestaand', type: 'overige', priority: 'laag', fase: 1, note: "Fase 2.7: ajouter schema.org LocalBusiness. NAP coherent avec Google My Business.", hreflang_nl: '/nl/contact/' },
+    ]
+  },
+  en: {
+    url: '/',
+    label: 'Homepage EN (default)',
+    status: 'bestaand',
+    type: 'homepage',
+    keyword: 'plastic pallets plastic bins',
+    note: 'EN is het standaard Shopware-kanaal (geen taalprefix).',
+    children: [
+      {
+        url: '/solutions/',
+        label: 'Solutions',
+        status: 'bestaand',
+        type: 'overzicht',
+        children: [
+          { url: '/solutions/space-saving-solutions/', label: 'Space-saving solutions', status: 'bestaand', type: 'oplossing' },
+          { url: '/solutions/sustainable-solutions/', label: 'Sustainable solutions', status: 'bestaand', type: 'oplossing' },
+          { url: '/solutions/automation-solutions/', label: 'Automation solutions', status: 'bestaand', type: 'oplossing' },
+          { url: '/solutions/custom-solutions/', label: 'Custom solutions', status: 'bestaand', type: 'oplossing' },
+        ]
+      },
+      {
+        url: '/sectors/',
+        label: 'Sectors',
+        status: 'bestaand',
+        type: 'overzicht',
+        children: [
+          { url: '/sectors/food-agro-industry/', label: 'Food & Agro-industry', status: 'bestaand', type: 'sectorpagina' },
+          { url: '/sectors/automotive/', label: 'Automotive', status: 'bestaand', type: 'sectorpagina' },
+          { url: '/sectors/transport-logistics/', label: 'Transport & Logistics', status: 'bestaand', type: 'sectorpagina' },
+        ]
+      },
+      {
+        url: '/products/',
+        label: 'Products (EN)',
+        status: 'nieuw',
+        type: 'overzicht',
+        priority: 'midden',
+        note: 'Optionele EN-productcategorietak. Lagere prioriteit dan NL en FR.',
+        children: [
+          { url: '/products/sleeve-pack/', label: 'Sleeve Pack', status: 'nieuw', cluster: 'BI-02', type: 'subcategorie', keyword: 'sleeve pack', volume: 90, priority: 'midden', fase: 2, h1: 'Sleeve Pack: Macronorm packaging', hreflang_nl: '/nl/producten/sleeve-pack/', hreflang_fr: '/fr/produits/sleeve-pack/' },
+        ]
+      },
+      { url: '/products-a-z/', label: 'Products A-Z', status: 'bestaand', type: 'utility', noindex: true },
+    ]
+  }
+};
+
+// ─── TREE RENDERING ───────────────────────────────────────────────────────────
+
+let selectedRow = null;
+
+function buildNodeHtml(node) {
+  const hasChildren = node.children && node.children.length > 0;
+  const isNew = node.status === 'nieuw';
+  const url = node.url;
+
+  const urlNoTrail = (url.endsWith('/') && url !== '/') ? url.slice(0, -1) : url;
+  const lastSlash  = urlNoTrail.lastIndexOf('/');
+  const lastSeg    = url === '/' ? '/' : urlNoTrail.slice(lastSlash + 1);
+  const parentPath = url === '/' ? '' : urlNoTrail.slice(0, lastSlash + 1); // includes trailing /
+
+  const dotClass = isNew ? 'node-dot-nieuw' : 'node-dot-bestaand';
+  const volClass = node.volume > 2000 ? 'hoog' : node.volume > 500 ? 'midden' : '';
+  const volText = node.volume ? node.volume.toLocaleString('nl-NL') + '/m' : '';
+
+  let badges = '';
+  if (node.noindex)           badges += `<span class="badge badge-noindex">noindex</span>`;
+  if (node.priority === 'kritiek') badges += `<span class="badge badge-kritiek">KRITIEK</span>`;
+  else if (node.priority === 'hoog')   badges += `<span class="badge badge-hoog">HOOG</span>`;
+  else if (node.priority === 'midden') badges += `<span class="badge badge-midden">MIDDEN</span>`;
+  else if (node.priority === 'laag')   badges += `<span class="badge badge-laag">LAAG</span>`;
+  if (node.fase) badges += `<span class="badge badge-fase">F${node.fase}</span>`;
+  if (isNew && !node.priority) badges += `<span class="badge badge-nieuw">NIEUW</span>`;
+  // Workflow status badge (always shown; default = Te doen)
+  const wd = workflowData[url] || {};
+  const wsKey = wd.status || 'todo';
+  const wsOpt = WS_OPTIONS.find(o => o.key === wsKey);
+  if (wsOpt) badges += `<span class="badge badge-ws-${wsKey}">${wsOpt.label}</span>`;
+
+  const urlHtml = url === '/'
+    ? `<span class="url-seg${isNew ? ' new' : ''}">/</span>`
+    : `<span class="url-dim">${parentPath}</span><span class="url-seg${isNew ? ' new' : ''}">${lastSeg}/</span>`;
+
+  const safeUrl = url.replace(/'/g, "\\'");
+  let html = `<div class="tree-node" data-status="${node.status}" data-priority="${node.priority || ''}" data-url="${url.replace(/"/g,'&quot;')}">`;
+  html += `<div class="tree-row" onclick="handleRowClick(this,'${safeUrl}')">`;
+  html += hasChildren ? `<span class="toggle-icon">▶</span>` : `<span class="toggle-placeholder"></span>`;
+  html += `<div class="node-dot ${dotClass}"></div>`;
+  html += `<div class="node-url">${urlHtml}</div>`;
+  html += `<div class="node-badges">${badges}</div>`;
+  html += `<div class="node-volume ${volClass}">${volText}</div>`;
+  html += `</div>`;
+
+  if (hasChildren) {
+    html += `<div class="tree-children">`;
+    for (const child of node.children) html += buildNodeHtml(child);
+    html += `</div>`;
+  }
+  html += `</div>`;
+  return html;
+}
+
+function renderTree(langKey) {
+  document.getElementById('lang-' + langKey).innerHTML = buildNodeHtml(nodes[langKey]);
+}
+
+// ─── CLICK HANDLING ───────────────────────────────────────────────────────────
+
+function handleRowClick(rowEl, url) {
+  const nodeEl = rowEl.parentElement;
+  if (selectedRow) selectedRow.classList.remove('selected');
+  rowEl.classList.add('selected');
+  selectedRow = rowEl;
+  if (nodeEl.querySelector('.tree-children')) nodeEl.classList.toggle('open');
+  showDetail(url);
+}
+
+function findNode(obj, url) {
+  if (obj.url === url) return obj;
+  if (obj.children) for (const c of obj.children) { const f = findNode(c, url); if (f) return f; }
+  return null;
+}
+
+function showDetail(url) {
+  let node = null;
+  for (const lang of ['nl','fr','en']) { node = findNode(nodes[lang], url); if (node) break; }
+  if (!node) return;
+
+  document.getElementById('detail-empty').style.display = 'none';
+  const content = document.getElementById('detail-content');
+  content.style.display = 'block';
+
+  const isNew = node.status === 'nieuw';
+  const typeLabels = { categorie: 'Categoriepagina', subcategorie: 'Subcategoriepagina', sectorpagina: 'Sectorpagina', oplossing: 'Oplossingspagina', overzicht: 'Overzichtspagina', homepage: 'Homepage', utility: 'Hulppagina', blog: 'Blog-artikel', 'case-study': 'Case study', overige: 'Overige pagina' };
+
+  let html = '';
+
+  // URL bar
+  const urlNT = (url.endsWith('/') && url !== '/') ? url.slice(0, -1) : url;
+  const lsIdx = urlNT.lastIndexOf('/');
+  const detailSeg = url === '/' ? '/' : urlNT.slice(lsIdx + 1);
+  const detailParent = url === '/' ? '' : urlNT.slice(0, lsIdx + 1);
+  const urlDisplay = url === '/' ? '/' : `${detailParent}<span>${detailSeg}/</span>`;
+  html += `<div class="detail-url-bar" onclick="copyUrl('${url.replace(/'/g,"\\'")}')">gw-sf.com${urlDisplay}</div>`;
+
+  // Badges
+  html += `<div class="detail-badges">`;
+  html += isNew ? `<span class="badge-lg badge-lg-nieuw">NIEUW</span>` : `<span class="badge-lg badge-lg-bestaand">BESTAAND</span>`;
+  if (node.priority === 'kritiek') html += `<span class="badge-lg badge-lg-kritiek">KRITIEK</span>`;
+  else if (node.priority === 'hoog')   html += `<span class="badge-lg badge-lg-hoog">HOOG</span>`;
+  else if (node.priority === 'midden') html += `<span class="badge-lg badge-lg-midden">MIDDEN</span>`;
+  else if (node.priority === 'laag')   html += `<span class="badge-lg badge-lg-laag">LAAG</span>`;
+  if (node.fase)    html += `<span class="badge-lg badge-lg-fase">Fase ${node.fase}</span>`;
+  if (node.cluster) html += `<span class="badge-lg badge-lg-cluster">${node.cluster}</span>`;
+  if (node.noindex) html += `<span class="badge-lg" style="background:#f4f4f4;color:#aaa;border:1px solid #e0e0e0">noindex</span>`;
+  html += `</div>`;
+
+  // ── Workflow card ────────────────────────────────────────────────────────────
+  const safeUrlJs = url.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+  const curWD = workflowData[url] || {};
+  html += `<div class="detail-card"><div class="detail-card-body">`;
+  html += `<div class="detail-section-title" style="font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700">Workflow status</div>`;
+  html += `<div class="ws-selector">`;
+  for (const opt of WS_OPTIONS) {
+    const active = curWD.status === opt.key ? ' ws-active' : '';
+    html += `<button class="ws-btn ws-${opt.key}${active}" onclick="setWorkflowStatus('${safeUrlJs}','${opt.key}')">${opt.label}</button>`;
+  }
+  html += `</div>`;
+  html += `<div class="detail-section-title" style="margin-top:14px">Document / briefing link</div>`;
+  html += `<div class="doc-link-row">`;
+  html += `<input type="text" class="doc-link-input" id="doc-link-input" value="${(curWD.docLink || '').replace(/"/g,'&quot;')}" placeholder="Plak hier de link naar het contentdocument..." onblur="setDocLink('${safeUrlJs}',this.value)" onkeydown="if(event.key==='Enter')this.blur()">`;
+  const dlHref = curWD.docLink ? ` href="${curWD.docLink.replace(/"/g,'&quot;')}"` : '';
+  const dlStyle = curWD.docLink ? '' : ' style="opacity:.3;pointer-events:none"';
+  html += `<a id="doc-link-open-btn" class="doc-link-open-btn" target="_blank"${dlHref}${dlStyle} title="Open document in nieuw tabblad">&#8599;</a>`;
+  html += `</div>`;
+  html += `<div class="detail-section-title" style="margin-top:14px">Notitie / opmerking</div>`;
+  html += `<textarea class="ws-comment" placeholder="Voeg een interne opmerking toe..." onblur="setComment('${safeUrlJs}',this.value)">${curWD.comment || ''}</textarea>`;
+  html += `</div></div>`;
+
+  // Type + SEO
+  html += `<div class="detail-card"><div class="detail-card-body">`;
+  html += `<div class="detail-section-title">Pagina-type</div><div class="detail-text">${typeLabels[node.type] || node.type}</div>`;
+  if (node.h1) { html += `<div class="detail-section-title">H1 voorstel</div><div class="detail-val">${node.h1}</div>`; }
+  if (node.meta_title) { html += `<div class="detail-section-title">Meta title</div><div class="detail-text">${node.meta_title}</div>`; }
+  if (node.meta_desc)  { html += `<div class="detail-section-title">Meta description</div><div class="detail-text italic">${node.meta_desc}</div>`; }
+  html += `</div></div>`;
+
+  // Keywords
+  if (node.keyword || node.keywords_sec) {
+    html += `<div class="detail-card"><div class="detail-card-body">`;
+    html += `<div class="detail-section-title">Keywords</div>`;
+    html += `<table class="kw-table">`;
+    if (node.keyword) {
+      const vol = node.volume ? node.volume.toLocaleString('nl-NL') + '/m' : 'n.v.t.';
+      const kd  = node.kd !== undefined ? `&nbsp;<span style="color:var(--muted);font-size:10px">KD ${node.kd}</span>` : '';
+      html += `<tr><td class="kw-main">&#9733; ${node.keyword}</td><td class="kw-vol-main">${vol}${kd}</td></tr>`;
+    }
+    if (node.keywords_sec) {
+      for (const [kw, vol] of node.keywords_sec) {
+        html += `<tr><td>${kw}</td><td>${vol ? vol.toLocaleString('nl-NL') + '/m' : 'n.v.t.'}</td></tr>`;
+      }
+    }
+    html += `</table></div></div>`;
+  }
+
+  // Hreflang
+  const hasHreflang = node.hreflang_fr || node.hreflang_nl || node.hreflang_en;
+  if (hasHreflang) {
+    html += `<div class="detail-card"><div class="detail-card-body">`;
+    html += `<div class="detail-section-title">Hreflang pendants</div>`;
+    if (node.hreflang_nl) html += `<div class="hreflang-row"><span class="hreflang-lang">NL</span><span class="hreflang-url">${node.hreflang_nl}</span></div>`;
+    if (node.hreflang_fr) html += `<div class="hreflang-row"><span class="hreflang-lang">FR</span><span class="hreflang-url">${node.hreflang_fr}</span></div>`;
+    if (node.hreflang_en) html += `<div class="hreflang-row"><span class="hreflang-lang">EN</span><span class="hreflang-url">${node.hreflang_en}</span></div>`;
+    html += `</div></div>`;
+  }
+
+  // Note
+  if (node.note) {
+    html += `<div class="note-box-navy" style="margin-bottom:10px">${node.note}</div>`;
+  }
+
+  // Briefing
+  if (node.briefing) {
+    html += `<div class="briefing-link" style="margin-bottom:10px">&#128196; Briefing beschikbaar: ${node.briefing}</div>`;
+  }
+
+  // Acties Jordy
+  const defaultActies = isNew ? [
+    'Shopware-categorie aanmaken',
+    `Slug instellen: ${url.replace(/^\//, '').replace(/\/$/, '')}`,
+    'Hreflang implementeren',
+    'Self-referencing canonical instellen'
+  ] : [];
+  const acties = node.acties || defaultActies;
+  if (acties.length > 0) {
+    html += `<div class="detail-card"><div class="detail-card-body">`;
+    html += `<div class="detail-section-title">Acties voor Jordy</div>`;
+    html += `<ul class="action-list">`;
+    for (const a of acties) html += `<li><span class="action-check">&#9744;</span>${a}</li>`;
+    if (node.noindex) html += `<li class="urgent"><span class="action-check">&#9888;</span>noindex meta-tag instellen</li>`;
+    html += `</ul></div></div>`;
+  }
+
+  content.innerHTML = html;
+}
+
+function copyUrl(url) {
+  navigator.clipboard.writeText('https://gw-sf.com' + url).catch(() => {});
+}
+
+// ─── CONTROLS ─────────────────────────────────────────────────────────────────
+
+let currentLang = 'nl';
+
+function switchLang(lang) {
+  currentLang = lang;
+  document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', ['nl','fr','en'][i] === lang));
+  document.querySelectorAll('.lang-content').forEach(el => el.classList.remove('active'));
+  document.getElementById('lang-' + lang).classList.add('active');
+  clearDetail();
+}
+
+function clearDetail() {
+  if (selectedRow) { selectedRow.classList.remove('selected'); selectedRow = null; }
+  document.getElementById('detail-empty').style.display = '';
+  document.getElementById('detail-content').style.display = 'none';
+}
+
+function expandAll()  { document.querySelectorAll('#lang-' + currentLang + ' .tree-node:not(.filter-hidden)').forEach(n => n.classList.add('open')); }
+function collapseAll(){ document.querySelectorAll('#lang-' + currentLang + ' .tree-node').forEach(n => n.classList.remove('open')); }
+
+// ─── WORKFLOW DATA ────────────────────────────────────────────────────────────
+
+// State is persisted server-side via /api/state
+let workflowData = {};
+
+const WS_OPTIONS = [
+  { key: 'todo',       label: 'Te doen'       },
+  { key: 'briefing',   label: 'Briefing klaar' },
+  { key: 'inprogress', label: 'In uitvoering'  },
+  { key: 'review',     label: 'In review'      },
+  { key: 'done',       label: 'Klaar'          },
+];
+
+let _saveTimer = null;
+function saveWorkflowData() {
+  clearTimeout(_saveTimer);
+  _saveTimer = setTimeout(() => {
+    fetch('/api/state', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(workflowData)
+    }).catch(e => console.error('[save]', e));
+  }, 400);
+}
+
+function getWD(url) {
+  if (!workflowData[url]) workflowData[url] = {};
+  return workflowData[url];
+}
+
+function setWorkflowStatus(url, status) {
+  const wd = getWD(url);
+  wd.status = wd.status === status ? null : status; // toggle off if same
+  saveWorkflowData();
+  updateNodeWsBadge(url);
+  showDetail(url);
+}
+
+function setDocLink(url, value) {
+  getWD(url).docLink = value.trim();
+  saveWorkflowData();
+  const btn = document.getElementById('doc-link-open-btn');
+  if (btn) {
+    btn.href   = value.trim() || '#';
+    btn.style.opacity = value.trim() ? '1' : '0.3';
+    btn.style.pointerEvents = value.trim() ? '' : 'none';
+  }
+}
+
+function setComment(url, value) {
+  getWD(url).comment = value;
+  saveWorkflowData();
+}
+
+function updateNodeWsBadge(url) {
+  const wd = workflowData[url] || {};
+  const wsKey = wd.status || 'todo';
+  const opt = WS_OPTIONS.find(o => o.key === wsKey);
+  document.querySelectorAll(`.tree-node[data-url="${CSS.escape(url)}"]`).forEach(n => {
+    const badgesEl = n.querySelector('.node-badges');
+    if (!badgesEl) return;
+    badgesEl.querySelectorAll('[class*="badge-ws-"]').forEach(b => b.remove());
+    if (opt) {
+      const span = document.createElement('span');
+      span.className = `badge badge-ws-${wsKey}`;
+      span.textContent = opt.label;
+      badgesEl.appendChild(span);
+    }
+  });
+}
+
+function exportWorkflow() {
+  const json = JSON.stringify(workflowData, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'gw-sf-workflow-status.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function importWorkflow() {
+  document.getElementById('import-file-input').click();
+}
+
+function handleImportFile(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const imported = JSON.parse(e.target.result);
+      workflowData = { ...workflowData, ...imported };
+      saveWorkflowData();
+      // Refresh all badges
+      Object.keys(imported).forEach(url => updateNodeWsBadge(url));
+      input.value = '';
+      alert('Workflow-status geladen: ' + Object.keys(imported).length + ' pagina\'s bijgewerkt.');
+    } catch(err) {
+      alert('Fout bij inladen: ongeldig JSON-bestand.');
+    }
+  };
+  reader.readAsText(file);
+}
+
+// ─── FILTERS ──────────────────────────────────────────────────────────────────
+
+const activeFilters = { status: new Set(), priority: new Set(), ws: new Set() };
+
+// Map filter keys to their DOM element IDs
+const filterIdMap = { bestaand: 'f-bestaand', nieuw: 'f-nieuw', hoog: 'f-hoog', midden: 'f-midden', laag: 'f-laag',
+  todo: 'f-ws-todo', briefing: 'f-ws-briefing', inprogress: 'f-ws-inprogress', review: 'f-ws-review', done: 'f-ws-done' };
+
+function toggleFilter(type, value) {
+  if (activeFilters[type].has(value)) {
+    activeFilters[type].delete(value);
+    document.getElementById(filterIdMap[value]).classList.remove('active');
+  } else {
+    activeFilters[type].add(value);
+    document.getElementById(filterIdMap[value]).classList.add('active');
+  }
+  applyFilters();
+}
+
+function getNodeWsStatus(nodeEl) {
+  const url = nodeEl.dataset.url || '';
+  return (workflowData[url] || {}).status || 'todo';
+}
+
+function nodeMatchesFilters(nodeEl) {
+  const status   = nodeEl.dataset.status   || '';
+  const priority = nodeEl.dataset.priority || '';
+  const wsStatus = getNodeWsStatus(nodeEl);
+  const statusOk   = activeFilters.status.size   === 0 || activeFilters.status.has(status);
+  const priorityOk = activeFilters.priority.size === 0 || activeFilters.priority.has(priority);
+  const wsOk       = activeFilters.ws.size       === 0 || activeFilters.ws.has(wsStatus);
+  return statusOk && priorityOk && wsOk;
+}
+
+function hasVisibleDescendant(nodeEl) {
+  const children = nodeEl.querySelectorAll(':scope > .tree-children > .tree-node');
+  for (const child of children) {
+    if (nodeMatchesFilters(child) || hasVisibleDescendant(child)) return true;
+  }
+  return false;
+}
+
+function applyFilters() {
+  const noFilters = activeFilters.status.size === 0 && activeFilters.priority.size === 0 && activeFilters.ws.size === 0;
+  const container = document.getElementById('lang-' + currentLang);
+  const allNodes  = container.querySelectorAll('.tree-node');
+
+  allNodes.forEach(node => {
+    if (noFilters) {
+      node.classList.remove('filter-hidden');
+    } else {
+      const visible = nodeMatchesFilters(node) || hasVisibleDescendant(node);
+      node.classList.toggle('filter-hidden', !visible);
+      if (visible && !nodeMatchesFilters(node)) node.classList.add('open');
+    }
+  });
+
+  // Update counter badge
+  const total   = noFilters ? 0 : container.querySelectorAll('.tree-node:not(.filter-hidden)').length;
+  const badge   = document.getElementById('filter-count');
+  badge.textContent = noFilters ? '' : total + ' URL' + (total !== 1 ? '\'s' : '');
+  badge.classList.toggle('visible', !noFilters);
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+
+async function initApp() {
+  // Load state from server
+  try {
+    const resp = await fetch('/api/state');
+    if (resp.ok) workflowData = await resp.json();
+  } catch(e) {
+    console.warn('[state] server not available, starting empty');
+  }
+
+  renderTree('nl');
+  renderTree('fr');
+  renderTree('en');
+  document.querySelectorAll('#lang-nl > .tree-node').forEach(n => n.classList.add('open'));
+
+  // Default all pages to 'todo' if no state set yet (reads URLs from DOM)
+  let changed = false;
+  document.querySelectorAll('.tree-node[data-url]').forEach(n => {
+    const url = n.dataset.url;
+    if (!url) return;
+    if (!workflowData[url]) { workflowData[url] = { status: 'todo' }; changed = true; }
+    else if (!workflowData[url].status) { workflowData[url].status = 'todo'; changed = true; }
+  });
+  if (changed) {
+    saveWorkflowData();
+    document.querySelectorAll('.tree-node[data-url]').forEach(n => updateNodeWsBadge(n.dataset.url));
+  }
+}
+
+initApp();
+</script>
+</body>
+</html>
