@@ -286,8 +286,7 @@ html, body { height: 100%; font-family: var(--font); font-weight: 400; backgroun
   transition: all 0.15s; letter-spacing: 0.01em;
 }
 .io-btn:hover { background: rgba(255,255,255,0.22); border-color: rgba(255,255,255,0.5); color: white; }
-.io-btn.io-import { background: rgba(62,164,211,0.25); border-color: rgba(62,164,211,0.5); }
-.io-btn.io-import:hover { background: rgba(62,164,211,0.4); }
+.io-live-badge { font-size: 11px; color: #7fdf9a; opacity: 0.9; letter-spacing: 0.02em; }
 
 .node-volume {
   font-size: 11px;
@@ -478,8 +477,8 @@ html, body { height: 100%; font-family: var(--font); font-weight: 400; backgroun
   <div class="header-title">URL-structuur &amp; Keyword Mapping: SEO 2026</div>
   <div class="header-meta">Revisie 2 &nbsp;·&nbsp; 10 juni 2026 &nbsp;·&nbsp; Sander De Gheest</div>
   <div class="io-toolbar">
-    <button class="io-btn io-import" onclick="importWorkflow()" title="Laad een eerder geexporteerd JSON-bestand in">&#8593; Importeren</button>
-    <button class="io-btn" onclick="exportWorkflow()" title="Download de huidige workflow-status als JSON-bestand">&#8595; Exporteren</button>
+    <span class="io-live-badge" title="Status wordt automatisch gesynchroniseerd voor alle gebruikers">&#9679; Live gedeeld</span>
+    <button class="io-btn" onclick="exportWorkflow()" title="Download backup van workflow-status als JSON">&#8595; Backup</button>
     <input type="file" id="import-file-input" accept=".json" style="display:none" onchange="handleImportFile(this)">
   </div>
 </div>
