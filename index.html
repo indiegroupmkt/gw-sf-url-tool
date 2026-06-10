@@ -475,7 +475,6 @@ html, body { height: 100%; font-family: var(--font); font-weight: 400; backgroun
     <span class="logo-name">Gamma-Wopla <span class="logo-sub">Smart-Flow</span></span>
   </div>
   <div class="header-title">URL-structuur &amp; Keyword Mapping: SEO 2026</div>
-  <div class="header-meta">Revisie 2 &nbsp;·&nbsp; 10 juni 2026 &nbsp;·&nbsp; Sander De Gheest</div>
   <div class="io-toolbar">
     <span class="io-live-badge" title="Status wordt automatisch gesynchroniseerd voor alle gebruikers">&#9679; Live gedeeld</span>
     <button class="io-btn" onclick="exportWorkflow()" title="Download backup van workflow-status als JSON">&#8595; Backup</button>
@@ -1456,5 +1455,9 @@ async function initApp() {
 
 initApp();
 </script>
+<footer style="text-align:center;padding:18px 24px;font-size:11px;color:#5d7a8e;border-top:1px solid rgba(255,255,255,0.06);margin-top:32px;">
+  &copy; <span id="footer-year"></span> Indie Group &nbsp;&middot;&nbsp; Intern werkdocument &nbsp;&middot;&nbsp; Niet voor extern gebruik
+</footer>
+<script>document.getElementById('footer-year').textContent = new Date().getFullYear();</script>
 </body>
 </html>
