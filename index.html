@@ -1266,6 +1266,9 @@ function collapseAll(){ document.querySelectorAll('#lang-' + currentLang + ' .tr
 
 // State is persisted server-side via /api/state
 let workflowData = {};
+// Only true once /api/state has been successfully loaded this session. Saving
+// while false would overwrite the live state with incomplete local data.
+let stateLoadedOk = false;
 
 const WS_OPTIONS = [
   { key: 'todo',       label: 'Te doen'       },
@@ -1277,6 +1280,10 @@ const WS_OPTIONS = [
 
 let _saveTimer = null;
 function saveWorkflowData() {
+  if (!stateLoadedOk) {
+    console.error('[save] blocked: state was never successfully loaded, refusing to overwrite server data');
+    return;
+  }
   clearTimeout(_saveTimer);
   _saveTimer = setTimeout(() => {
     fetch('/api/state', {
@@ -1445,18 +1452,33 @@ function applyFilters() {
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 
 async function initApp() {
-  // Load state from server
+  // Load state from server. If this fails, we must NOT treat it as "no data
+  // exists" — that previously caused a full reset of all statuses/links to be
+  // auto-saved back to the server, wiping the live state. See incident 8/07/2026.
   try {
     const resp = await fetch('/api/state');
-    if (resp.ok) workflowData = await resp.json();
+    if (resp.ok) {
+      workflowData = await resp.json();
+      stateLoadedOk = true;
+    } else {
+      console.error('[state] load failed with status', resp.status);
+    }
   } catch(e) {
-    console.warn('[state] server not available, starting empty');
+    console.error('[state] server not available:', e.message);
   }
 
   renderTree('nl');
   renderTree('fr');
   renderTree('en');
   document.querySelectorAll('#lang-nl > .tree-node').forEach(n => n.classList.add('open'));
+
+  if (!stateLoadedOk) {
+    const banner = document.createElement('div');
+    banner.textContent = 'Kon de opgeslagen data niet laden. Wijzigingen worden niet opgeslagen — herlaad de pagina voor je verder werkt.';
+    banner.style.cssText = 'position:sticky;top:0;z-index:999;background:#c0392b;color:#fff;padding:10px 16px;font-size:13px;text-align:center';
+    document.body.prepend(banner);
+    return; // do not seed defaults or save while we have no confirmed server state
+  }
 
   // Default all pages to 'todo' if no state set yet (reads URLs from DOM)
   let changed = false;
